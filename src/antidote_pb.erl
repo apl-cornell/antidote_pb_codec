@@ -307,7 +307,10 @@ encode_msg_ApbGenericUpdate(#'ApbGenericUpdate'{value =
 			    Bin, TrUserData) ->
     begin
       TrF1 = id(F1, TrUserData),
-      e_type_bytes(TrF1, <<Bin/binary, 10>>, TrUserData)
+      if TrF1 == [] -> Bin;
+	 true ->
+	     e_field_ApbGenericUpdate_value(TrF1, Bin, TrUserData)
+      end
     end.
 
 encode_msg_ApbGetGenericResp(Msg, TrUserData) ->
@@ -1130,6 +1133,15 @@ encode_msg_ApbConnectToDCsResp(#'ApbConnectToDCsResp'{success
 	   end
     end.
 
+e_field_ApbGenericUpdate_value([Elem | Rest], Bin,
+			       TrUserData) ->
+    Bin2 = <<Bin/binary, 10>>,
+    Bin3 = e_type_bytes(id(Elem, TrUserData), Bin2,
+			TrUserData),
+    e_field_ApbGenericUpdate_value(Rest, Bin3, TrUserData);
+e_field_ApbGenericUpdate_value([], Bin, _TrUserData) ->
+    Bin.
+
 e_field_ApbSetUpdate_adds([Elem | Rest], Bin,
 			  TrUserData) ->
     Bin2 = <<Bin/binary, 18>>,
@@ -1925,15 +1937,16 @@ skip_64_ApbErrorResp(<<_:64, Rest/binary>>, Z1, Z2,
 
 decode_msg_ApbGenericUpdate(Bin, TrUserData) ->
     dfp_read_field_def_ApbGenericUpdate(Bin, 0, 0,
-					id(undefined, TrUserData), TrUserData).
+					id([], TrUserData), TrUserData).
 
 dfp_read_field_def_ApbGenericUpdate(<<10, Rest/binary>>,
 				    Z1, Z2, F@_1, TrUserData) ->
     d_field_ApbGenericUpdate_value(Rest, Z1, Z2, F@_1,
 				   TrUserData);
-dfp_read_field_def_ApbGenericUpdate(<<>>, 0, 0, F@_1,
-				    _) ->
-    #'ApbGenericUpdate'{value = F@_1};
+dfp_read_field_def_ApbGenericUpdate(<<>>, 0, 0, R1,
+				    TrUserData) ->
+    #'ApbGenericUpdate'{value =
+			    lists_reverse(R1, TrUserData)};
 dfp_read_field_def_ApbGenericUpdate(Other, Z1, Z2, F@_1,
 				    TrUserData) ->
     dg_read_field_def_ApbGenericUpdate(Other, Z1, Z2, F@_1,
@@ -1970,9 +1983,10 @@ dg_read_field_def_ApbGenericUpdate(<<0:1, X:7,
 		skip_32_ApbGenericUpdate(Rest, 0, 0, F@_1, TrUserData)
 	  end
     end;
-dg_read_field_def_ApbGenericUpdate(<<>>, 0, 0, F@_1,
-				   _) ->
-    #'ApbGenericUpdate'{value = F@_1}.
+dg_read_field_def_ApbGenericUpdate(<<>>, 0, 0, R1,
+				   TrUserData) ->
+    #'ApbGenericUpdate'{value =
+			    lists_reverse(R1, TrUserData)}.
 
 d_field_ApbGenericUpdate_value(<<1:1, X:7,
 				 Rest/binary>>,
@@ -1982,14 +1996,15 @@ d_field_ApbGenericUpdate_value(<<1:1, X:7,
 				   X bsl N + Acc, F@_1, TrUserData);
 d_field_ApbGenericUpdate_value(<<0:1, X:7,
 				 Rest/binary>>,
-			       N, Acc, _, TrUserData) ->
+			       N, Acc, Prev, TrUserData) ->
     {NewFValue, RestF} = begin
 			   Len = X bsl N + Acc,
 			   <<Bytes:Len/binary, Rest2/binary>> = Rest,
 			   {id(binary:copy(Bytes), TrUserData), Rest2}
 			 end,
     dfp_read_field_def_ApbGenericUpdate(RestF, 0, 0,
-					NewFValue, TrUserData).
+					cons(NewFValue, Prev, TrUserData),
+					TrUserData).
 
 skip_varint_ApbGenericUpdate(<<1:1, _:7, Rest/binary>>,
 			     Z1, Z2, F@_1, TrUserData) ->
@@ -7945,9 +7960,15 @@ merge_msg_ApbErrorResp(#'ApbErrorResp'{},
     #'ApbErrorResp'{errmsg = NFerrmsg, errcode = NFerrcode}.
 
 -compile({nowarn_unused_function,merge_msg_ApbGenericUpdate/3}).
-merge_msg_ApbGenericUpdate(#'ApbGenericUpdate'{},
-			   #'ApbGenericUpdate'{value = NFvalue}, _) ->
-    #'ApbGenericUpdate'{value = NFvalue}.
+merge_msg_ApbGenericUpdate(#'ApbGenericUpdate'{value =
+						   PFvalue},
+			   #'ApbGenericUpdate'{value = NFvalue}, TrUserData) ->
+    #'ApbGenericUpdate'{value =
+			    if PFvalue /= undefined, NFvalue /= undefined ->
+				   'erlang_++'(PFvalue, NFvalue, TrUserData);
+			       PFvalue == undefined -> NFvalue;
+			       NFvalue == undefined -> PFvalue
+			    end}.
 
 -compile({nowarn_unused_function,merge_msg_ApbGetGenericResp/3}).
 merge_msg_ApbGetGenericResp(#'ApbGetGenericResp'{},
@@ -8708,7 +8729,15 @@ v_msg_ApbErrorResp(X, Path, _TrUserData) ->
 -dialyzer({nowarn_function,v_msg_ApbGenericUpdate/3}).
 v_msg_ApbGenericUpdate(#'ApbGenericUpdate'{value = F1},
 		       Path, TrUserData) ->
-    v_type_bytes(F1, [value | Path], TrUserData), ok;
+    if is_list(F1) ->
+	   _ = [v_type_bytes(Elem, [value | Path], TrUserData)
+		|| Elem <- F1],
+	   ok;
+       true ->
+	   mk_type_error({invalid_list_of, bytes}, F1,
+			 [value | Path])
+    end,
+    ok;
 v_msg_ApbGenericUpdate(X, Path, _TrUserData) ->
     mk_type_error({expected_msg, 'ApbGenericUpdate'}, X,
 		  Path).
@@ -9568,7 +9597,7 @@ get_msg_defs() ->
 	      type = uint32, occurrence = required, opts = []}]},
      {{msg, 'ApbGenericUpdate'},
       [#field{name = value, fnum = 1, rnum = 2, type = bytes,
-	      occurrence = required, opts = []}]},
+	      occurrence = repeated, opts = []}]},
      {{msg, 'ApbGetGenericResp'},
       [#field{name = value, fnum = 1, rnum = 2, type = bytes,
 	      occurrence = required, opts = []}]},
@@ -9877,7 +9906,7 @@ find_msg_def('ApbErrorResp') ->
 	    type = uint32, occurrence = required, opts = []}];
 find_msg_def('ApbGenericUpdate') ->
     [#field{name = value, fnum = 1, rnum = 2, type = bytes,
-	    occurrence = required, opts = []}];
+	    occurrence = repeated, opts = []}];
 find_msg_def('ApbGetGenericResp') ->
     [#field{name = value, fnum = 1, rnum = 2, type = bytes,
 	    occurrence = required, opts = []}];

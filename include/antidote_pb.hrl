@@ -18,7 +18,7 @@
 -ifndef('APBGENERICUPDATE_PB_H').
 -define('APBGENERICUPDATE_PB_H', true).
 -record('ApbGenericUpdate',
-        {value                  :: iodata()         % = 1
+        {value = []             :: [iodata()] | undefined % = 1
         }).
 -endif.
 
