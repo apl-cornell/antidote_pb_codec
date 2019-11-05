@@ -939,13 +939,18 @@ decode_map_entry(#'ApbMapEntry'{key = KeyEnc,
 
 % generic responses
 
-encode_generic_update(Update) ->
-    {assign, Value} = Update,
-    #'ApbGenericUpdate'{value = Value}.
+encode_generic_update({invoke, Value}) ->
+    #'ApbGenericUpdate'{value = Value};
+encode_generic_update({invoke_all, Value}) ->
+    #'ApbGenericUpdate'{value = [Value]}.
 
 decode_generic_update(Update) ->
     #'ApbGenericUpdate'{value = Value} = Update,
-    {assign, Value}.
+    case Value of
+      undefined -> [];
+      [Elem] -> {invoke, Elem};
+      Elems when is_list(Elems) -> {invoke_all, Elems}
+    end.
 
 %% Cluster Management
 
