@@ -28,12 +28,16 @@
 -include("gpb.hrl").
 
 %% enumerated types
--type 'CRDT_type'() :: 'COUNTER' | 'ORSET' | 'LWWREG' | 'MVREG' | 'GMAP' | 'RWSET' | 'RRMAP' | 'FATCOUNTER' | 'FLAG_EW' | 'FLAG_DW'.
+-type 'CRDT_type'() :: 'COUNTER' | 'ORSET' | 'LWWREG' | 'MVREG' | 'GMAP' | 'RWSET' | 'RRMAP' | 'FATCOUNTER' | 'FLAG_EW' | 'FLAG_DW' | 'GENERIC'.
 -type 'ApbSetUpdate.SetOpType'() :: 'ADD' | 'REMOVE'.
 -export_type(['CRDT_type'/0, 'ApbSetUpdate.SetOpType'/0]).
 
 %% message types
 -type 'ApbErrorResp'() :: #'ApbErrorResp'{}.
+
+-type 'ApbGenericUpdate'() :: #'ApbGenericUpdate'{}.
+
+-type 'ApbGetGenericResp'() :: #'ApbGetGenericResp'{}.
 
 -type 'ApbCounterUpdate'() :: #'ApbCounterUpdate'{}.
 
@@ -107,20 +111,20 @@
 
 -type 'ApbConnectToDCs'() :: #'ApbConnectToDCs'{}.
 
--export_type(['ApbErrorResp'/0, 'ApbCounterUpdate'/0, 'ApbGetCounterResp'/0, 'ApbSetUpdate'/0, 'ApbGetSetResp'/0, 'ApbRegUpdate'/0, 'ApbGetRegResp'/0, 'ApbGetMVRegResp'/0, 'ApbMapKey'/0, 'ApbMapUpdate'/0, 'ApbMapNestedUpdate'/0, 'ApbGetMapResp'/0, 'ApbMapEntry'/0, 'ApbFlagUpdate'/0, 'ApbGetFlagResp'/0, 'ApbCrdtReset'/0, 'ApbOperationResp'/0, 'ApbTxnProperties'/0, 'ApbBoundObject'/0, 'ApbReadObjects'/0, 'ApbUpdateOp'/0, 'ApbUpdateOperation'/0, 'ApbUpdateObjects'/0, 'ApbStartTransaction'/0, 'ApbAbortTransaction'/0, 'ApbCommitTransaction'/0, 'ApbStaticUpdateObjects'/0, 'ApbStaticReadObjects'/0, 'ApbStartTransactionResp'/0, 'ApbReadObjectResp'/0, 'ApbReadObjectsResp'/0, 'ApbCommitResp'/0, 'ApbStaticReadObjectsResp'/0, 'ApbCreateDC'/0, 'ApbGetConnectionDescriptor'/0, 'ApbGetConnectionDescriptorResp'/0, 'ApbConnectToDCs'/0]).
+-export_type(['ApbErrorResp'/0, 'ApbGenericUpdate'/0, 'ApbGetGenericResp'/0, 'ApbCounterUpdate'/0, 'ApbGetCounterResp'/0, 'ApbSetUpdate'/0, 'ApbGetSetResp'/0, 'ApbRegUpdate'/0, 'ApbGetRegResp'/0, 'ApbGetMVRegResp'/0, 'ApbMapKey'/0, 'ApbMapUpdate'/0, 'ApbMapNestedUpdate'/0, 'ApbGetMapResp'/0, 'ApbMapEntry'/0, 'ApbFlagUpdate'/0, 'ApbGetFlagResp'/0, 'ApbCrdtReset'/0, 'ApbOperationResp'/0, 'ApbTxnProperties'/0, 'ApbBoundObject'/0, 'ApbReadObjects'/0, 'ApbUpdateOp'/0, 'ApbUpdateOperation'/0, 'ApbUpdateObjects'/0, 'ApbStartTransaction'/0, 'ApbAbortTransaction'/0, 'ApbCommitTransaction'/0, 'ApbStaticUpdateObjects'/0, 'ApbStaticReadObjects'/0, 'ApbStartTransactionResp'/0, 'ApbReadObjectResp'/0, 'ApbReadObjectsResp'/0, 'ApbCommitResp'/0, 'ApbStaticReadObjectsResp'/0, 'ApbCreateDC'/0, 'ApbGetConnectionDescriptor'/0, 'ApbGetConnectionDescriptorResp'/0, 'ApbConnectToDCs'/0]).
 
--spec encode_msg(#'ApbErrorResp'{} | #'ApbCounterUpdate'{} | #'ApbGetCounterResp'{} | #'ApbSetUpdate'{} | #'ApbGetSetResp'{} | #'ApbRegUpdate'{} | #'ApbGetRegResp'{} | #'ApbGetMVRegResp'{} | #'ApbMapKey'{} | #'ApbMapUpdate'{} | #'ApbMapNestedUpdate'{} | #'ApbGetMapResp'{} | #'ApbMapEntry'{} | #'ApbFlagUpdate'{} | #'ApbGetFlagResp'{} | #'ApbCrdtReset'{} | #'ApbOperationResp'{} | #'ApbTxnProperties'{} | #'ApbBoundObject'{} | #'ApbReadObjects'{} | #'ApbUpdateOp'{} | #'ApbUpdateOperation'{} | #'ApbUpdateObjects'{} | #'ApbStartTransaction'{} | #'ApbAbortTransaction'{} | #'ApbCommitTransaction'{} | #'ApbStaticUpdateObjects'{} | #'ApbStaticReadObjects'{} | #'ApbStartTransactionResp'{} | #'ApbReadObjectResp'{} | #'ApbReadObjectsResp'{} | #'ApbCommitResp'{} | #'ApbStaticReadObjectsResp'{} | #'ApbCreateDC'{} | #'ApbGetConnectionDescriptor'{} | #'ApbGetConnectionDescriptorResp'{} | #'ApbConnectToDCs'{}) -> binary().
+-spec encode_msg(#'ApbErrorResp'{} | #'ApbGenericUpdate'{} | #'ApbGetGenericResp'{} | #'ApbCounterUpdate'{} | #'ApbGetCounterResp'{} | #'ApbSetUpdate'{} | #'ApbGetSetResp'{} | #'ApbRegUpdate'{} | #'ApbGetRegResp'{} | #'ApbGetMVRegResp'{} | #'ApbMapKey'{} | #'ApbMapUpdate'{} | #'ApbMapNestedUpdate'{} | #'ApbGetMapResp'{} | #'ApbMapEntry'{} | #'ApbFlagUpdate'{} | #'ApbGetFlagResp'{} | #'ApbCrdtReset'{} | #'ApbOperationResp'{} | #'ApbTxnProperties'{} | #'ApbBoundObject'{} | #'ApbReadObjects'{} | #'ApbUpdateOp'{} | #'ApbUpdateOperation'{} | #'ApbUpdateObjects'{} | #'ApbStartTransaction'{} | #'ApbAbortTransaction'{} | #'ApbCommitTransaction'{} | #'ApbStaticUpdateObjects'{} | #'ApbStaticReadObjects'{} | #'ApbStartTransactionResp'{} | #'ApbReadObjectResp'{} | #'ApbReadObjectsResp'{} | #'ApbCommitResp'{} | #'ApbStaticReadObjectsResp'{} | #'ApbCreateDC'{} | #'ApbGetConnectionDescriptor'{} | #'ApbGetConnectionDescriptorResp'{} | #'ApbConnectToDCs'{}) -> binary().
 encode_msg(Msg) when tuple_size(Msg) >= 1 ->
     encode_msg(Msg, element(1, Msg), []).
 
--spec encode_msg(#'ApbErrorResp'{} | #'ApbCounterUpdate'{} | #'ApbGetCounterResp'{} | #'ApbSetUpdate'{} | #'ApbGetSetResp'{} | #'ApbRegUpdate'{} | #'ApbGetRegResp'{} | #'ApbGetMVRegResp'{} | #'ApbMapKey'{} | #'ApbMapUpdate'{} | #'ApbMapNestedUpdate'{} | #'ApbGetMapResp'{} | #'ApbMapEntry'{} | #'ApbFlagUpdate'{} | #'ApbGetFlagResp'{} | #'ApbCrdtReset'{} | #'ApbOperationResp'{} | #'ApbTxnProperties'{} | #'ApbBoundObject'{} | #'ApbReadObjects'{} | #'ApbUpdateOp'{} | #'ApbUpdateOperation'{} | #'ApbUpdateObjects'{} | #'ApbStartTransaction'{} | #'ApbAbortTransaction'{} | #'ApbCommitTransaction'{} | #'ApbStaticUpdateObjects'{} | #'ApbStaticReadObjects'{} | #'ApbStartTransactionResp'{} | #'ApbReadObjectResp'{} | #'ApbReadObjectsResp'{} | #'ApbCommitResp'{} | #'ApbStaticReadObjectsResp'{} | #'ApbCreateDC'{} | #'ApbGetConnectionDescriptor'{} | #'ApbGetConnectionDescriptorResp'{} | #'ApbConnectToDCs'{}, atom() | list()) -> binary().
+-spec encode_msg(#'ApbErrorResp'{} | #'ApbGenericUpdate'{} | #'ApbGetGenericResp'{} | #'ApbCounterUpdate'{} | #'ApbGetCounterResp'{} | #'ApbSetUpdate'{} | #'ApbGetSetResp'{} | #'ApbRegUpdate'{} | #'ApbGetRegResp'{} | #'ApbGetMVRegResp'{} | #'ApbMapKey'{} | #'ApbMapUpdate'{} | #'ApbMapNestedUpdate'{} | #'ApbGetMapResp'{} | #'ApbMapEntry'{} | #'ApbFlagUpdate'{} | #'ApbGetFlagResp'{} | #'ApbCrdtReset'{} | #'ApbOperationResp'{} | #'ApbTxnProperties'{} | #'ApbBoundObject'{} | #'ApbReadObjects'{} | #'ApbUpdateOp'{} | #'ApbUpdateOperation'{} | #'ApbUpdateObjects'{} | #'ApbStartTransaction'{} | #'ApbAbortTransaction'{} | #'ApbCommitTransaction'{} | #'ApbStaticUpdateObjects'{} | #'ApbStaticReadObjects'{} | #'ApbStartTransactionResp'{} | #'ApbReadObjectResp'{} | #'ApbReadObjectsResp'{} | #'ApbCommitResp'{} | #'ApbStaticReadObjectsResp'{} | #'ApbCreateDC'{} | #'ApbGetConnectionDescriptor'{} | #'ApbGetConnectionDescriptorResp'{} | #'ApbConnectToDCs'{}, atom() | list()) -> binary().
 encode_msg(Msg, MsgName) when is_atom(MsgName) ->
     encode_msg(Msg, MsgName, []);
 encode_msg(Msg, Opts)
     when tuple_size(Msg) >= 1, is_list(Opts) ->
     encode_msg(Msg, element(1, Msg), Opts).
 
--spec encode_msg(#'ApbErrorResp'{} | #'ApbCounterUpdate'{} | #'ApbGetCounterResp'{} | #'ApbSetUpdate'{} | #'ApbGetSetResp'{} | #'ApbRegUpdate'{} | #'ApbGetRegResp'{} | #'ApbGetMVRegResp'{} | #'ApbMapKey'{} | #'ApbMapUpdate'{} | #'ApbMapNestedUpdate'{} | #'ApbGetMapResp'{} | #'ApbMapEntry'{} | #'ApbFlagUpdate'{} | #'ApbGetFlagResp'{} | #'ApbCrdtReset'{} | #'ApbOperationResp'{} | #'ApbTxnProperties'{} | #'ApbBoundObject'{} | #'ApbReadObjects'{} | #'ApbUpdateOp'{} | #'ApbUpdateOperation'{} | #'ApbUpdateObjects'{} | #'ApbStartTransaction'{} | #'ApbAbortTransaction'{} | #'ApbCommitTransaction'{} | #'ApbStaticUpdateObjects'{} | #'ApbStaticReadObjects'{} | #'ApbStartTransactionResp'{} | #'ApbReadObjectResp'{} | #'ApbReadObjectsResp'{} | #'ApbCommitResp'{} | #'ApbStaticReadObjectsResp'{} | #'ApbCreateDC'{} | #'ApbGetConnectionDescriptor'{} | #'ApbGetConnectionDescriptorResp'{} | #'ApbConnectToDCs'{}, atom(), list()) -> binary().
+-spec encode_msg(#'ApbErrorResp'{} | #'ApbGenericUpdate'{} | #'ApbGetGenericResp'{} | #'ApbCounterUpdate'{} | #'ApbGetCounterResp'{} | #'ApbSetUpdate'{} | #'ApbGetSetResp'{} | #'ApbRegUpdate'{} | #'ApbGetRegResp'{} | #'ApbGetMVRegResp'{} | #'ApbMapKey'{} | #'ApbMapUpdate'{} | #'ApbMapNestedUpdate'{} | #'ApbGetMapResp'{} | #'ApbMapEntry'{} | #'ApbFlagUpdate'{} | #'ApbGetFlagResp'{} | #'ApbCrdtReset'{} | #'ApbOperationResp'{} | #'ApbTxnProperties'{} | #'ApbBoundObject'{} | #'ApbReadObjects'{} | #'ApbUpdateOp'{} | #'ApbUpdateOperation'{} | #'ApbUpdateObjects'{} | #'ApbStartTransaction'{} | #'ApbAbortTransaction'{} | #'ApbCommitTransaction'{} | #'ApbStaticUpdateObjects'{} | #'ApbStaticReadObjects'{} | #'ApbStartTransactionResp'{} | #'ApbReadObjectResp'{} | #'ApbReadObjectsResp'{} | #'ApbCommitResp'{} | #'ApbStaticReadObjectsResp'{} | #'ApbCreateDC'{} | #'ApbGetConnectionDescriptor'{} | #'ApbGetConnectionDescriptorResp'{} | #'ApbConnectToDCs'{}, atom(), list()) -> binary().
 encode_msg(Msg, MsgName, Opts) ->
     case proplists:get_bool(verify, Opts) of
       true -> verify_msg(Msg, MsgName, Opts);
@@ -131,6 +135,12 @@ encode_msg(Msg, MsgName, Opts) ->
       'ApbErrorResp' ->
 	  encode_msg_ApbErrorResp(id(Msg, TrUserData),
 				  TrUserData);
+      'ApbGenericUpdate' ->
+	  encode_msg_ApbGenericUpdate(id(Msg, TrUserData),
+				      TrUserData);
+      'ApbGetGenericResp' ->
+	  encode_msg_ApbGetGenericResp(id(Msg, TrUserData),
+				       TrUserData);
       'ApbCounterUpdate' ->
 	  encode_msg_ApbCounterUpdate(id(Msg, TrUserData),
 				      TrUserData);
@@ -254,6 +264,33 @@ encode_msg_ApbErrorResp(#'ApbErrorResp'{errmsg = F1,
     begin
       TrF2 = id(F2, TrUserData),
       e_varint(TrF2, <<B1/binary, 16>>, TrUserData)
+    end.
+
+encode_msg_ApbGenericUpdate(Msg, TrUserData) ->
+    encode_msg_ApbGenericUpdate(Msg, <<>>, TrUserData).
+
+
+encode_msg_ApbGenericUpdate(#'ApbGenericUpdate'{value =
+						    F1},
+			    Bin, TrUserData) ->
+    begin
+      TrF1 = id(F1, TrUserData),
+      if TrF1 == [] -> Bin;
+	 true ->
+	     e_field_ApbGenericUpdate_value(TrF1, Bin, TrUserData)
+      end
+    end.
+
+encode_msg_ApbGetGenericResp(Msg, TrUserData) ->
+    encode_msg_ApbGetGenericResp(Msg, <<>>, TrUserData).
+
+
+encode_msg_ApbGetGenericResp(#'ApbGetGenericResp'{value
+						      = F1},
+			     Bin, TrUserData) ->
+    begin
+      TrF1 = id(F1, TrUserData),
+      e_type_bytes(TrF1, <<Bin/binary, 10>>, TrUserData)
     end.
 
 encode_msg_ApbCounterUpdate(Msg, TrUserData) ->
@@ -581,7 +618,7 @@ encode_msg_ApbUpdateOperation(#'ApbUpdateOperation'{counterop
 							= F1,
 						    setop = F2, regop = F3,
 						    mapop = F4, resetop = F5,
-						    flagop = F6},
+						    flagop = F6, genop = F7},
 			      Bin, TrUserData) ->
     B1 = if F1 == undefined -> Bin;
 	    true ->
@@ -628,12 +665,21 @@ encode_msg_ApbUpdateOperation(#'ApbUpdateOperation'{counterop
 						      TrUserData)
 		end
 	 end,
-    if F6 == undefined -> B5;
+    B6 = if F6 == undefined -> B5;
+	    true ->
+		begin
+		  TrF6 = id(F6, TrUserData),
+		  e_mfield_ApbUpdateOperation_flagop(TrF6,
+						     <<B5/binary, 58>>,
+						     TrUserData)
+		end
+	 end,
+    if F7 == undefined -> B6;
        true ->
 	   begin
-	     TrF6 = id(F6, TrUserData),
-	     e_mfield_ApbUpdateOperation_flagop(TrF6,
-						<<B5/binary, 58>>, TrUserData)
+	     TrF7 = id(F7, TrUserData),
+	     e_mfield_ApbUpdateOperation_genop(TrF7,
+					       <<B6/binary, 66>>, TrUserData)
 	   end
     end.
 
@@ -791,7 +837,7 @@ encode_msg_ApbReadObjectResp(#'ApbReadObjectResp'{counter
 						      = F1,
 						  set = F2, reg = F3,
 						  mvreg = F4, map = F5,
-						  flag = F6},
+						  flag = F6, generic = F7},
 			     Bin, TrUserData) ->
     B1 = if F1 == undefined -> Bin;
 	    true ->
@@ -835,12 +881,20 @@ encode_msg_ApbReadObjectResp(#'ApbReadObjectResp'{counter
 						 TrUserData)
 		end
 	 end,
-    if F6 == undefined -> B5;
+    B6 = if F6 == undefined -> B5;
+	    true ->
+		begin
+		  TrF6 = id(F6, TrUserData),
+		  e_mfield_ApbReadObjectResp_flag(TrF6, <<B5/binary, 58>>,
+						  TrUserData)
+		end
+	 end,
+    if F7 == undefined -> B6;
        true ->
 	   begin
-	     TrF6 = id(F6, TrUserData),
-	     e_mfield_ApbReadObjectResp_flag(TrF6, <<B5/binary, 58>>,
-					     TrUserData)
+	     TrF7 = id(F7, TrUserData),
+	     e_mfield_ApbReadObjectResp_generic(TrF7,
+						<<B6/binary, 66>>, TrUserData)
 	   end
     end.
 
@@ -988,6 +1042,15 @@ encode_msg_ApbConnectToDCs(#'ApbConnectToDCs'{descriptors
 						 TrUserData)
       end
     end.
+
+e_field_ApbGenericUpdate_value([Elem | Rest], Bin,
+			       TrUserData) ->
+    Bin2 = <<Bin/binary, 10>>,
+    Bin3 = e_type_bytes(id(Elem, TrUserData), Bin2,
+			TrUserData),
+    e_field_ApbGenericUpdate_value(Rest, Bin3, TrUserData);
+e_field_ApbGenericUpdate_value([], Bin, _TrUserData) ->
+    Bin.
 
 e_field_ApbSetUpdate_adds([Elem | Rest], Bin,
 			  TrUserData) ->
@@ -1161,6 +1224,13 @@ e_mfield_ApbUpdateOperation_flagop(Msg, Bin,
     Bin2 = <<Bin/binary, 2>>,
     encode_msg_ApbFlagUpdate(Msg, Bin2, TrUserData).
 
+e_mfield_ApbUpdateOperation_genop(Msg, Bin,
+				  TrUserData) ->
+    SubBin = encode_msg_ApbGenericUpdate(Msg, <<>>,
+					 TrUserData),
+    Bin2 = e_varint(byte_size(SubBin), Bin),
+    <<Bin2/binary, SubBin/binary>>.
+
 e_mfield_ApbUpdateObjects_updates(Msg, Bin,
 				  TrUserData) ->
     SubBin = encode_msg_ApbUpdateOp(Msg, <<>>, TrUserData),
@@ -1273,6 +1343,13 @@ e_mfield_ApbReadObjectResp_flag(Msg, Bin, TrUserData) ->
     Bin2 = <<Bin/binary, 2>>,
     encode_msg_ApbGetFlagResp(Msg, Bin2, TrUserData).
 
+e_mfield_ApbReadObjectResp_generic(Msg, Bin,
+				   TrUserData) ->
+    SubBin = encode_msg_ApbGetGenericResp(Msg, <<>>,
+					  TrUserData),
+    Bin2 = e_varint(byte_size(SubBin), Bin),
+    <<Bin2/binary, SubBin/binary>>.
+
 e_mfield_ApbReadObjectsResp_objects(Msg, Bin,
 				    TrUserData) ->
     SubBin = encode_msg_ApbReadObjectResp(Msg, <<>>,
@@ -1345,6 +1422,8 @@ e_enum_CRDT_type('FLAG_EW', Bin, _TrUserData) ->
     <<Bin/binary, 13>>;
 e_enum_CRDT_type('FLAG_DW', Bin, _TrUserData) ->
     <<Bin/binary, 14>>;
+e_enum_CRDT_type('GENERIC', Bin, _TrUserData) ->
+    <<Bin/binary, 15>>;
 e_enum_CRDT_type(V, Bin, _TrUserData) ->
     e_varint(V, Bin).
 
@@ -1473,6 +1552,14 @@ decode_msg_1_catch(Bin, MsgName, TrUserData) ->
 
 decode_msg_2_doit('ApbErrorResp', Bin, TrUserData) ->
     id(decode_msg_ApbErrorResp(Bin, TrUserData),
+       TrUserData);
+decode_msg_2_doit('ApbGenericUpdate', Bin,
+		  TrUserData) ->
+    id(decode_msg_ApbGenericUpdate(Bin, TrUserData),
+       TrUserData);
+decode_msg_2_doit('ApbGetGenericResp', Bin,
+		  TrUserData) ->
+    id(decode_msg_ApbGetGenericResp(Bin, TrUserData),
        TrUserData);
 decode_msg_2_doit('ApbCounterUpdate', Bin,
 		  TrUserData) ->
@@ -1726,6 +1813,224 @@ skip_64_ApbErrorResp(<<_:64, Rest/binary>>, Z1, Z2,
 		     F@_1, F@_2, TrUserData) ->
     dfp_read_field_def_ApbErrorResp(Rest, Z1, Z2, F@_1,
 				    F@_2, TrUserData).
+
+decode_msg_ApbGenericUpdate(Bin, TrUserData) ->
+    dfp_read_field_def_ApbGenericUpdate(Bin, 0, 0,
+					id([], TrUserData), TrUserData).
+
+dfp_read_field_def_ApbGenericUpdate(<<10, Rest/binary>>,
+				    Z1, Z2, F@_1, TrUserData) ->
+    d_field_ApbGenericUpdate_value(Rest, Z1, Z2, F@_1,
+				   TrUserData);
+dfp_read_field_def_ApbGenericUpdate(<<>>, 0, 0, R1,
+				    TrUserData) ->
+    #'ApbGenericUpdate'{value =
+			    lists_reverse(R1, TrUserData)};
+dfp_read_field_def_ApbGenericUpdate(Other, Z1, Z2, F@_1,
+				    TrUserData) ->
+    dg_read_field_def_ApbGenericUpdate(Other, Z1, Z2, F@_1,
+				       TrUserData).
+
+dg_read_field_def_ApbGenericUpdate(<<1:1, X:7,
+				     Rest/binary>>,
+				   N, Acc, F@_1, TrUserData)
+    when N < 32 - 7 ->
+    dg_read_field_def_ApbGenericUpdate(Rest, N + 7,
+				       X bsl N + Acc, F@_1, TrUserData);
+dg_read_field_def_ApbGenericUpdate(<<0:1, X:7,
+				     Rest/binary>>,
+				   N, Acc, F@_1, TrUserData) ->
+    Key = X bsl N + Acc,
+    case Key of
+      10 ->
+	  d_field_ApbGenericUpdate_value(Rest, 0, 0, F@_1,
+					 TrUserData);
+      _ ->
+	  case Key band 7 of
+	    0 ->
+		skip_varint_ApbGenericUpdate(Rest, 0, 0, F@_1,
+					     TrUserData);
+	    1 ->
+		skip_64_ApbGenericUpdate(Rest, 0, 0, F@_1, TrUserData);
+	    2 ->
+		skip_length_delimited_ApbGenericUpdate(Rest, 0, 0, F@_1,
+						       TrUserData);
+	    3 ->
+		skip_group_ApbGenericUpdate(Rest, Key bsr 3, 0, F@_1,
+					    TrUserData);
+	    5 ->
+		skip_32_ApbGenericUpdate(Rest, 0, 0, F@_1, TrUserData)
+	  end
+    end;
+dg_read_field_def_ApbGenericUpdate(<<>>, 0, 0, R1,
+				   TrUserData) ->
+    #'ApbGenericUpdate'{value =
+			    lists_reverse(R1, TrUserData)}.
+
+d_field_ApbGenericUpdate_value(<<1:1, X:7,
+				 Rest/binary>>,
+			       N, Acc, F@_1, TrUserData)
+    when N < 57 ->
+    d_field_ApbGenericUpdate_value(Rest, N + 7,
+				   X bsl N + Acc, F@_1, TrUserData);
+d_field_ApbGenericUpdate_value(<<0:1, X:7,
+				 Rest/binary>>,
+			       N, Acc, Prev, TrUserData) ->
+    {NewFValue, RestF} = begin
+			   Len = X bsl N + Acc,
+			   <<Bytes:Len/binary, Rest2/binary>> = Rest,
+			   {id(binary:copy(Bytes), TrUserData), Rest2}
+			 end,
+    dfp_read_field_def_ApbGenericUpdate(RestF, 0, 0,
+					cons(NewFValue, Prev, TrUserData),
+					TrUserData).
+
+skip_varint_ApbGenericUpdate(<<1:1, _:7, Rest/binary>>,
+			     Z1, Z2, F@_1, TrUserData) ->
+    skip_varint_ApbGenericUpdate(Rest, Z1, Z2, F@_1,
+				 TrUserData);
+skip_varint_ApbGenericUpdate(<<0:1, _:7, Rest/binary>>,
+			     Z1, Z2, F@_1, TrUserData) ->
+    dfp_read_field_def_ApbGenericUpdate(Rest, Z1, Z2, F@_1,
+					TrUserData).
+
+skip_length_delimited_ApbGenericUpdate(<<1:1, X:7,
+					 Rest/binary>>,
+				       N, Acc, F@_1, TrUserData)
+    when N < 57 ->
+    skip_length_delimited_ApbGenericUpdate(Rest, N + 7,
+					   X bsl N + Acc, F@_1, TrUserData);
+skip_length_delimited_ApbGenericUpdate(<<0:1, X:7,
+					 Rest/binary>>,
+				       N, Acc, F@_1, TrUserData) ->
+    Length = X bsl N + Acc,
+    <<_:Length/binary, Rest2/binary>> = Rest,
+    dfp_read_field_def_ApbGenericUpdate(Rest2, 0, 0, F@_1,
+					TrUserData).
+
+skip_group_ApbGenericUpdate(Bin, FNum, Z2, F@_1,
+			    TrUserData) ->
+    {_, Rest} = read_group(Bin, FNum),
+    dfp_read_field_def_ApbGenericUpdate(Rest, 0, Z2, F@_1,
+					TrUserData).
+
+skip_32_ApbGenericUpdate(<<_:32, Rest/binary>>, Z1, Z2,
+			 F@_1, TrUserData) ->
+    dfp_read_field_def_ApbGenericUpdate(Rest, Z1, Z2, F@_1,
+					TrUserData).
+
+skip_64_ApbGenericUpdate(<<_:64, Rest/binary>>, Z1, Z2,
+			 F@_1, TrUserData) ->
+    dfp_read_field_def_ApbGenericUpdate(Rest, Z1, Z2, F@_1,
+					TrUserData).
+
+decode_msg_ApbGetGenericResp(Bin, TrUserData) ->
+    dfp_read_field_def_ApbGetGenericResp(Bin, 0, 0,
+					 id(undefined, TrUserData), TrUserData).
+
+dfp_read_field_def_ApbGetGenericResp(<<10,
+				       Rest/binary>>,
+				     Z1, Z2, F@_1, TrUserData) ->
+    d_field_ApbGetGenericResp_value(Rest, Z1, Z2, F@_1,
+				    TrUserData);
+dfp_read_field_def_ApbGetGenericResp(<<>>, 0, 0, F@_1,
+				     _) ->
+    #'ApbGetGenericResp'{value = F@_1};
+dfp_read_field_def_ApbGetGenericResp(Other, Z1, Z2,
+				     F@_1, TrUserData) ->
+    dg_read_field_def_ApbGetGenericResp(Other, Z1, Z2, F@_1,
+					TrUserData).
+
+dg_read_field_def_ApbGetGenericResp(<<1:1, X:7,
+				      Rest/binary>>,
+				    N, Acc, F@_1, TrUserData)
+    when N < 32 - 7 ->
+    dg_read_field_def_ApbGetGenericResp(Rest, N + 7,
+					X bsl N + Acc, F@_1, TrUserData);
+dg_read_field_def_ApbGetGenericResp(<<0:1, X:7,
+				      Rest/binary>>,
+				    N, Acc, F@_1, TrUserData) ->
+    Key = X bsl N + Acc,
+    case Key of
+      10 ->
+	  d_field_ApbGetGenericResp_value(Rest, 0, 0, F@_1,
+					  TrUserData);
+      _ ->
+	  case Key band 7 of
+	    0 ->
+		skip_varint_ApbGetGenericResp(Rest, 0, 0, F@_1,
+					      TrUserData);
+	    1 ->
+		skip_64_ApbGetGenericResp(Rest, 0, 0, F@_1, TrUserData);
+	    2 ->
+		skip_length_delimited_ApbGetGenericResp(Rest, 0, 0,
+							F@_1, TrUserData);
+	    3 ->
+		skip_group_ApbGetGenericResp(Rest, Key bsr 3, 0, F@_1,
+					     TrUserData);
+	    5 ->
+		skip_32_ApbGetGenericResp(Rest, 0, 0, F@_1, TrUserData)
+	  end
+    end;
+dg_read_field_def_ApbGetGenericResp(<<>>, 0, 0, F@_1,
+				    _) ->
+    #'ApbGetGenericResp'{value = F@_1}.
+
+d_field_ApbGetGenericResp_value(<<1:1, X:7,
+				  Rest/binary>>,
+				N, Acc, F@_1, TrUserData)
+    when N < 57 ->
+    d_field_ApbGetGenericResp_value(Rest, N + 7,
+				    X bsl N + Acc, F@_1, TrUserData);
+d_field_ApbGetGenericResp_value(<<0:1, X:7,
+				  Rest/binary>>,
+				N, Acc, _, TrUserData) ->
+    {NewFValue, RestF} = begin
+			   Len = X bsl N + Acc,
+			   <<Bytes:Len/binary, Rest2/binary>> = Rest,
+			   {id(binary:copy(Bytes), TrUserData), Rest2}
+			 end,
+    dfp_read_field_def_ApbGetGenericResp(RestF, 0, 0,
+					 NewFValue, TrUserData).
+
+skip_varint_ApbGetGenericResp(<<1:1, _:7, Rest/binary>>,
+			      Z1, Z2, F@_1, TrUserData) ->
+    skip_varint_ApbGetGenericResp(Rest, Z1, Z2, F@_1,
+				  TrUserData);
+skip_varint_ApbGetGenericResp(<<0:1, _:7, Rest/binary>>,
+			      Z1, Z2, F@_1, TrUserData) ->
+    dfp_read_field_def_ApbGetGenericResp(Rest, Z1, Z2, F@_1,
+					 TrUserData).
+
+skip_length_delimited_ApbGetGenericResp(<<1:1, X:7,
+					  Rest/binary>>,
+					N, Acc, F@_1, TrUserData)
+    when N < 57 ->
+    skip_length_delimited_ApbGetGenericResp(Rest, N + 7,
+					    X bsl N + Acc, F@_1, TrUserData);
+skip_length_delimited_ApbGetGenericResp(<<0:1, X:7,
+					  Rest/binary>>,
+					N, Acc, F@_1, TrUserData) ->
+    Length = X bsl N + Acc,
+    <<_:Length/binary, Rest2/binary>> = Rest,
+    dfp_read_field_def_ApbGetGenericResp(Rest2, 0, 0, F@_1,
+					 TrUserData).
+
+skip_group_ApbGetGenericResp(Bin, FNum, Z2, F@_1,
+			     TrUserData) ->
+    {_, Rest} = read_group(Bin, FNum),
+    dfp_read_field_def_ApbGetGenericResp(Rest, 0, Z2, F@_1,
+					 TrUserData).
+
+skip_32_ApbGetGenericResp(<<_:32, Rest/binary>>, Z1, Z2,
+			  F@_1, TrUserData) ->
+    dfp_read_field_def_ApbGetGenericResp(Rest, Z1, Z2, F@_1,
+					 TrUserData).
+
+skip_64_ApbGetGenericResp(<<_:64, Rest/binary>>, Z1, Z2,
+			  F@_1, TrUserData) ->
+    dfp_read_field_def_ApbGetGenericResp(Rest, Z1, Z2, F@_1,
+					 TrUserData).
 
 decode_msg_ApbCounterUpdate(Bin, TrUserData) ->
     dfp_read_field_def_ApbCounterUpdate(Bin, 0, 0,
@@ -4193,134 +4498,153 @@ decode_msg_ApbUpdateOperation(Bin, TrUserData) ->
 					  id(undefined, TrUserData),
 					  id(undefined, TrUserData),
 					  id(undefined, TrUserData),
+					  id(undefined, TrUserData),
 					  TrUserData).
 
 dfp_read_field_def_ApbUpdateOperation(<<10,
 					Rest/binary>>,
 				      Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5,
-				      F@_6, TrUserData) ->
+				      F@_6, F@_7, TrUserData) ->
     d_field_ApbUpdateOperation_counterop(Rest, Z1, Z2, F@_1,
-					 F@_2, F@_3, F@_4, F@_5, F@_6,
+					 F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 					 TrUserData);
 dfp_read_field_def_ApbUpdateOperation(<<18,
 					Rest/binary>>,
 				      Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5,
-				      F@_6, TrUserData) ->
+				      F@_6, F@_7, TrUserData) ->
     d_field_ApbUpdateOperation_setop(Rest, Z1, Z2, F@_1,
-				     F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData);
+				     F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
+				     TrUserData);
 dfp_read_field_def_ApbUpdateOperation(<<26,
 					Rest/binary>>,
 				      Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5,
-				      F@_6, TrUserData) ->
+				      F@_6, F@_7, TrUserData) ->
     d_field_ApbUpdateOperation_regop(Rest, Z1, Z2, F@_1,
-				     F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData);
+				     F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
+				     TrUserData);
 dfp_read_field_def_ApbUpdateOperation(<<42,
 					Rest/binary>>,
 				      Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5,
-				      F@_6, TrUserData) ->
+				      F@_6, F@_7, TrUserData) ->
     d_field_ApbUpdateOperation_mapop(Rest, Z1, Z2, F@_1,
-				     F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData);
+				     F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
+				     TrUserData);
 dfp_read_field_def_ApbUpdateOperation(<<50,
 					Rest/binary>>,
 				      Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5,
-				      F@_6, TrUserData) ->
+				      F@_6, F@_7, TrUserData) ->
     d_field_ApbUpdateOperation_resetop(Rest, Z1, Z2, F@_1,
-				       F@_2, F@_3, F@_4, F@_5, F@_6,
+				       F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 				       TrUserData);
 dfp_read_field_def_ApbUpdateOperation(<<58,
 					Rest/binary>>,
 				      Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5,
-				      F@_6, TrUserData) ->
+				      F@_6, F@_7, TrUserData) ->
     d_field_ApbUpdateOperation_flagop(Rest, Z1, Z2, F@_1,
-				      F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData);
+				      F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
+				      TrUserData);
+dfp_read_field_def_ApbUpdateOperation(<<66,
+					Rest/binary>>,
+				      Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5,
+				      F@_6, F@_7, TrUserData) ->
+    d_field_ApbUpdateOperation_genop(Rest, Z1, Z2, F@_1,
+				     F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
+				     TrUserData);
 dfp_read_field_def_ApbUpdateOperation(<<>>, 0, 0, F@_1,
-				      F@_2, F@_3, F@_4, F@_5, F@_6, _) ->
+				      F@_2, F@_3, F@_4, F@_5, F@_6, F@_7, _) ->
     #'ApbUpdateOperation'{counterop = F@_1, setop = F@_2,
 			  regop = F@_3, mapop = F@_4, resetop = F@_5,
-			  flagop = F@_6};
+			  flagop = F@_6, genop = F@_7};
 dfp_read_field_def_ApbUpdateOperation(Other, Z1, Z2,
-				      F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+				      F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 				      TrUserData) ->
     dg_read_field_def_ApbUpdateOperation(Other, Z1, Z2,
 					 F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-					 TrUserData).
+					 F@_7, TrUserData).
 
 dg_read_field_def_ApbUpdateOperation(<<1:1, X:7,
 				       Rest/binary>>,
 				     N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				     TrUserData)
+				     F@_7, TrUserData)
     when N < 32 - 7 ->
     dg_read_field_def_ApbUpdateOperation(Rest, N + 7,
 					 X bsl N + Acc, F@_1, F@_2, F@_3, F@_4,
-					 F@_5, F@_6, TrUserData);
+					 F@_5, F@_6, F@_7, TrUserData);
 dg_read_field_def_ApbUpdateOperation(<<0:1, X:7,
 				       Rest/binary>>,
 				     N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				     TrUserData) ->
+				     F@_7, TrUserData) ->
     Key = X bsl N + Acc,
     case Key of
       10 ->
 	  d_field_ApbUpdateOperation_counterop(Rest, 0, 0, F@_1,
 					       F@_2, F@_3, F@_4, F@_5, F@_6,
-					       TrUserData);
+					       F@_7, TrUserData);
       18 ->
 	  d_field_ApbUpdateOperation_setop(Rest, 0, 0, F@_1, F@_2,
-					   F@_3, F@_4, F@_5, F@_6, TrUserData);
+					   F@_3, F@_4, F@_5, F@_6, F@_7,
+					   TrUserData);
       26 ->
 	  d_field_ApbUpdateOperation_regop(Rest, 0, 0, F@_1, F@_2,
-					   F@_3, F@_4, F@_5, F@_6, TrUserData);
+					   F@_3, F@_4, F@_5, F@_6, F@_7,
+					   TrUserData);
       42 ->
 	  d_field_ApbUpdateOperation_mapop(Rest, 0, 0, F@_1, F@_2,
-					   F@_3, F@_4, F@_5, F@_6, TrUserData);
+					   F@_3, F@_4, F@_5, F@_6, F@_7,
+					   TrUserData);
       50 ->
 	  d_field_ApbUpdateOperation_resetop(Rest, 0, 0, F@_1,
-					     F@_2, F@_3, F@_4, F@_5, F@_6,
+					     F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 					     TrUserData);
       58 ->
 	  d_field_ApbUpdateOperation_flagop(Rest, 0, 0, F@_1,
-					    F@_2, F@_3, F@_4, F@_5, F@_6,
+					    F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 					    TrUserData);
+      66 ->
+	  d_field_ApbUpdateOperation_genop(Rest, 0, 0, F@_1, F@_2,
+					   F@_3, F@_4, F@_5, F@_6, F@_7,
+					   TrUserData);
       _ ->
 	  case Key band 7 of
 	    0 ->
 		skip_varint_ApbUpdateOperation(Rest, 0, 0, F@_1, F@_2,
-					       F@_3, F@_4, F@_5, F@_6,
+					       F@_3, F@_4, F@_5, F@_6, F@_7,
 					       TrUserData);
 	    1 ->
 		skip_64_ApbUpdateOperation(Rest, 0, 0, F@_1, F@_2, F@_3,
-					   F@_4, F@_5, F@_6, TrUserData);
+					   F@_4, F@_5, F@_6, F@_7, TrUserData);
 	    2 ->
 		skip_length_delimited_ApbUpdateOperation(Rest, 0, 0,
 							 F@_1, F@_2, F@_3, F@_4,
-							 F@_5, F@_6,
+							 F@_5, F@_6, F@_7,
 							 TrUserData);
 	    3 ->
 		skip_group_ApbUpdateOperation(Rest, Key bsr 3, 0, F@_1,
 					      F@_2, F@_3, F@_4, F@_5, F@_6,
-					      TrUserData);
+					      F@_7, TrUserData);
 	    5 ->
 		skip_32_ApbUpdateOperation(Rest, 0, 0, F@_1, F@_2, F@_3,
-					   F@_4, F@_5, F@_6, TrUserData)
+					   F@_4, F@_5, F@_6, F@_7, TrUserData)
 	  end
     end;
 dg_read_field_def_ApbUpdateOperation(<<>>, 0, 0, F@_1,
-				     F@_2, F@_3, F@_4, F@_5, F@_6, _) ->
+				     F@_2, F@_3, F@_4, F@_5, F@_6, F@_7, _) ->
     #'ApbUpdateOperation'{counterop = F@_1, setop = F@_2,
 			  regop = F@_3, mapop = F@_4, resetop = F@_5,
-			  flagop = F@_6}.
+			  flagop = F@_6, genop = F@_7}.
 
 d_field_ApbUpdateOperation_counterop(<<1:1, X:7,
 				       Rest/binary>>,
 				     N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				     TrUserData)
+				     F@_7, TrUserData)
     when N < 57 ->
     d_field_ApbUpdateOperation_counterop(Rest, N + 7,
 					 X bsl N + Acc, F@_1, F@_2, F@_3, F@_4,
-					 F@_5, F@_6, TrUserData);
+					 F@_5, F@_6, F@_7, TrUserData);
 d_field_ApbUpdateOperation_counterop(<<0:1, X:7,
 				       Rest/binary>>,
 				     N, Acc, Prev, F@_2, F@_3, F@_4, F@_5, F@_6,
-				     TrUserData) ->
+				     F@_7, TrUserData) ->
     {NewFValue, RestF} = begin
 			   Len = X bsl N + Acc,
 			   <<Bs:Len/binary, Rest2/binary>> = Rest,
@@ -4335,21 +4659,21 @@ d_field_ApbUpdateOperation_counterop(<<0:1, X:7,
 									    NewFValue,
 									    TrUserData)
 					  end,
-					  F@_2, F@_3, F@_4, F@_5, F@_6,
+					  F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 					  TrUserData).
 
 d_field_ApbUpdateOperation_setop(<<1:1, X:7,
 				   Rest/binary>>,
 				 N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				 TrUserData)
+				 F@_7, TrUserData)
     when N < 57 ->
     d_field_ApbUpdateOperation_setop(Rest, N + 7,
 				     X bsl N + Acc, F@_1, F@_2, F@_3, F@_4,
-				     F@_5, F@_6, TrUserData);
+				     F@_5, F@_6, F@_7, TrUserData);
 d_field_ApbUpdateOperation_setop(<<0:1, X:7,
 				   Rest/binary>>,
 				 N, Acc, F@_1, Prev, F@_3, F@_4, F@_5, F@_6,
-				 TrUserData) ->
+				 F@_7, TrUserData) ->
     {NewFValue, RestF} = begin
 			   Len = X bsl N + Acc,
 			   <<Bs:Len/binary, Rest2/binary>> = Rest,
@@ -4364,20 +4688,21 @@ d_field_ApbUpdateOperation_setop(<<0:1, X:7,
 									NewFValue,
 									TrUserData)
 					  end,
-					  F@_3, F@_4, F@_5, F@_6, TrUserData).
+					  F@_3, F@_4, F@_5, F@_6, F@_7,
+					  TrUserData).
 
 d_field_ApbUpdateOperation_regop(<<1:1, X:7,
 				   Rest/binary>>,
 				 N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				 TrUserData)
+				 F@_7, TrUserData)
     when N < 57 ->
     d_field_ApbUpdateOperation_regop(Rest, N + 7,
 				     X bsl N + Acc, F@_1, F@_2, F@_3, F@_4,
-				     F@_5, F@_6, TrUserData);
+				     F@_5, F@_6, F@_7, TrUserData);
 d_field_ApbUpdateOperation_regop(<<0:1, X:7,
 				   Rest/binary>>,
 				 N, Acc, F@_1, F@_2, Prev, F@_4, F@_5, F@_6,
-				 TrUserData) ->
+				 F@_7, TrUserData) ->
     {NewFValue, RestF} = begin
 			   Len = X bsl N + Acc,
 			   <<Bs:Len/binary, Rest2/binary>> = Rest,
@@ -4393,20 +4718,20 @@ d_field_ApbUpdateOperation_regop(<<0:1, X:7,
 									NewFValue,
 									TrUserData)
 					  end,
-					  F@_4, F@_5, F@_6, TrUserData).
+					  F@_4, F@_5, F@_6, F@_7, TrUserData).
 
 d_field_ApbUpdateOperation_mapop(<<1:1, X:7,
 				   Rest/binary>>,
 				 N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				 TrUserData)
+				 F@_7, TrUserData)
     when N < 57 ->
     d_field_ApbUpdateOperation_mapop(Rest, N + 7,
 				     X bsl N + Acc, F@_1, F@_2, F@_3, F@_4,
-				     F@_5, F@_6, TrUserData);
+				     F@_5, F@_6, F@_7, TrUserData);
 d_field_ApbUpdateOperation_mapop(<<0:1, X:7,
 				   Rest/binary>>,
 				 N, Acc, F@_1, F@_2, F@_3, Prev, F@_5, F@_6,
-				 TrUserData) ->
+				 F@_7, TrUserData) ->
     {NewFValue, RestF} = begin
 			   Len = X bsl N + Acc,
 			   <<Bs:Len/binary, Rest2/binary>> = Rest,
@@ -4422,20 +4747,20 @@ d_field_ApbUpdateOperation_mapop(<<0:1, X:7,
 									NewFValue,
 									TrUserData)
 					  end,
-					  F@_5, F@_6, TrUserData).
+					  F@_5, F@_6, F@_7, TrUserData).
 
 d_field_ApbUpdateOperation_resetop(<<1:1, X:7,
 				     Rest/binary>>,
 				   N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				   TrUserData)
+				   F@_7, TrUserData)
     when N < 57 ->
     d_field_ApbUpdateOperation_resetop(Rest, N + 7,
 				       X bsl N + Acc, F@_1, F@_2, F@_3, F@_4,
-				       F@_5, F@_6, TrUserData);
+				       F@_5, F@_6, F@_7, TrUserData);
 d_field_ApbUpdateOperation_resetop(<<0:1, X:7,
 				     Rest/binary>>,
 				   N, Acc, F@_1, F@_2, F@_3, F@_4, Prev, F@_6,
-				   TrUserData) ->
+				   F@_7, TrUserData) ->
     {NewFValue, RestF} = begin
 			   Len = X bsl N + Acc,
 			   <<Bs:Len/binary, Rest2/binary>> = Rest,
@@ -4451,20 +4776,20 @@ d_field_ApbUpdateOperation_resetop(<<0:1, X:7,
 									NewFValue,
 									TrUserData)
 					  end,
-					  F@_6, TrUserData).
+					  F@_6, F@_7, TrUserData).
 
 d_field_ApbUpdateOperation_flagop(<<1:1, X:7,
 				    Rest/binary>>,
 				  N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				  TrUserData)
+				  F@_7, TrUserData)
     when N < 57 ->
     d_field_ApbUpdateOperation_flagop(Rest, N + 7,
 				      X bsl N + Acc, F@_1, F@_2, F@_3, F@_4,
-				      F@_5, F@_6, TrUserData);
+				      F@_5, F@_6, F@_7, TrUserData);
 d_field_ApbUpdateOperation_flagop(<<0:1, X:7,
 				    Rest/binary>>,
 				  N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, Prev,
-				  TrUserData) ->
+				  F@_7, TrUserData) ->
     {NewFValue, RestF} = begin
 			   Len = X bsl N + Acc,
 			   <<Bs:Len/binary, Rest2/binary>> = Rest,
@@ -4480,60 +4805,90 @@ d_field_ApbUpdateOperation_flagop(<<0:1, X:7,
 									 NewFValue,
 									 TrUserData)
 					  end,
+					  F@_7, TrUserData).
+
+d_field_ApbUpdateOperation_genop(<<1:1, X:7,
+				   Rest/binary>>,
+				 N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+				 F@_7, TrUserData)
+    when N < 57 ->
+    d_field_ApbUpdateOperation_genop(Rest, N + 7,
+				     X bsl N + Acc, F@_1, F@_2, F@_3, F@_4,
+				     F@_5, F@_6, F@_7, TrUserData);
+d_field_ApbUpdateOperation_genop(<<0:1, X:7,
+				   Rest/binary>>,
+				 N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+				 Prev, TrUserData) ->
+    {NewFValue, RestF} = begin
+			   Len = X bsl N + Acc,
+			   <<Bs:Len/binary, Rest2/binary>> = Rest,
+			   {id(decode_msg_ApbGenericUpdate(Bs, TrUserData),
+			       TrUserData),
+			    Rest2}
+			 end,
+    dfp_read_field_def_ApbUpdateOperation(RestF, 0, 0, F@_1,
+					  F@_2, F@_3, F@_4, F@_5, F@_6,
+					  if Prev == undefined -> NewFValue;
+					     true ->
+						 merge_msg_ApbGenericUpdate(Prev,
+									    NewFValue,
+									    TrUserData)
+					  end,
 					  TrUserData).
 
 skip_varint_ApbUpdateOperation(<<1:1, _:7,
 				 Rest/binary>>,
-			       Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+			       Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 			       TrUserData) ->
     skip_varint_ApbUpdateOperation(Rest, Z1, Z2, F@_1, F@_2,
-				   F@_3, F@_4, F@_5, F@_6, TrUserData);
+				   F@_3, F@_4, F@_5, F@_6, F@_7, TrUserData);
 skip_varint_ApbUpdateOperation(<<0:1, _:7,
 				 Rest/binary>>,
-			       Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+			       Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 			       TrUserData) ->
     dfp_read_field_def_ApbUpdateOperation(Rest, Z1, Z2,
 					  F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-					  TrUserData).
+					  F@_7, TrUserData).
 
 skip_length_delimited_ApbUpdateOperation(<<1:1, X:7,
 					   Rest/binary>>,
 					 N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5,
-					 F@_6, TrUserData)
+					 F@_6, F@_7, TrUserData)
     when N < 57 ->
     skip_length_delimited_ApbUpdateOperation(Rest, N + 7,
 					     X bsl N + Acc, F@_1, F@_2, F@_3,
-					     F@_4, F@_5, F@_6, TrUserData);
+					     F@_4, F@_5, F@_6, F@_7,
+					     TrUserData);
 skip_length_delimited_ApbUpdateOperation(<<0:1, X:7,
 					   Rest/binary>>,
 					 N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5,
-					 F@_6, TrUserData) ->
+					 F@_6, F@_7, TrUserData) ->
     Length = X bsl N + Acc,
     <<_:Length/binary, Rest2/binary>> = Rest,
     dfp_read_field_def_ApbUpdateOperation(Rest2, 0, 0, F@_1,
-					  F@_2, F@_3, F@_4, F@_5, F@_6,
+					  F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 					  TrUserData).
 
 skip_group_ApbUpdateOperation(Bin, FNum, Z2, F@_1, F@_2,
-			      F@_3, F@_4, F@_5, F@_6, TrUserData) ->
+			      F@_3, F@_4, F@_5, F@_6, F@_7, TrUserData) ->
     {_, Rest} = read_group(Bin, FNum),
     dfp_read_field_def_ApbUpdateOperation(Rest, 0, Z2, F@_1,
-					  F@_2, F@_3, F@_4, F@_5, F@_6,
+					  F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 					  TrUserData).
 
 skip_32_ApbUpdateOperation(<<_:32, Rest/binary>>, Z1,
-			   Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+			   Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 			   TrUserData) ->
     dfp_read_field_def_ApbUpdateOperation(Rest, Z1, Z2,
 					  F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-					  TrUserData).
+					  F@_7, TrUserData).
 
 skip_64_ApbUpdateOperation(<<_:64, Rest/binary>>, Z1,
-			   Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+			   Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 			   TrUserData) ->
     dfp_read_field_def_ApbUpdateOperation(Rest, Z1, Z2,
 					  F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-					  TrUserData).
+					  F@_7, TrUserData).
 
 decode_msg_ApbUpdateObjects(Bin, TrUserData) ->
     dfp_read_field_def_ApbUpdateObjects(Bin, 0, 0,
@@ -5572,127 +5927,149 @@ decode_msg_ApbReadObjectResp(Bin, TrUserData) ->
 					 id(undefined, TrUserData),
 					 id(undefined, TrUserData),
 					 id(undefined, TrUserData),
+					 id(undefined, TrUserData),
 					 id(undefined, TrUserData), TrUserData).
 
 dfp_read_field_def_ApbReadObjectResp(<<10,
 				       Rest/binary>>,
 				     Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				     TrUserData) ->
+				     F@_7, TrUserData) ->
     d_field_ApbReadObjectResp_counter(Rest, Z1, Z2, F@_1,
-				      F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData);
+				      F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
+				      TrUserData);
 dfp_read_field_def_ApbReadObjectResp(<<18,
 				       Rest/binary>>,
 				     Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				     TrUserData) ->
+				     F@_7, TrUserData) ->
     d_field_ApbReadObjectResp_set(Rest, Z1, Z2, F@_1, F@_2,
-				  F@_3, F@_4, F@_5, F@_6, TrUserData);
+				  F@_3, F@_4, F@_5, F@_6, F@_7, TrUserData);
 dfp_read_field_def_ApbReadObjectResp(<<26,
 				       Rest/binary>>,
 				     Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				     TrUserData) ->
+				     F@_7, TrUserData) ->
     d_field_ApbReadObjectResp_reg(Rest, Z1, Z2, F@_1, F@_2,
-				  F@_3, F@_4, F@_5, F@_6, TrUserData);
+				  F@_3, F@_4, F@_5, F@_6, F@_7, TrUserData);
 dfp_read_field_def_ApbReadObjectResp(<<34,
 				       Rest/binary>>,
 				     Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				     TrUserData) ->
+				     F@_7, TrUserData) ->
     d_field_ApbReadObjectResp_mvreg(Rest, Z1, Z2, F@_1,
-				    F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData);
+				    F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
+				    TrUserData);
 dfp_read_field_def_ApbReadObjectResp(<<50,
 				       Rest/binary>>,
 				     Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				     TrUserData) ->
+				     F@_7, TrUserData) ->
     d_field_ApbReadObjectResp_map(Rest, Z1, Z2, F@_1, F@_2,
-				  F@_3, F@_4, F@_5, F@_6, TrUserData);
+				  F@_3, F@_4, F@_5, F@_6, F@_7, TrUserData);
 dfp_read_field_def_ApbReadObjectResp(<<58,
 				       Rest/binary>>,
 				     Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				     TrUserData) ->
+				     F@_7, TrUserData) ->
     d_field_ApbReadObjectResp_flag(Rest, Z1, Z2, F@_1, F@_2,
-				   F@_3, F@_4, F@_5, F@_6, TrUserData);
+				   F@_3, F@_4, F@_5, F@_6, F@_7, TrUserData);
+dfp_read_field_def_ApbReadObjectResp(<<66,
+				       Rest/binary>>,
+				     Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+				     F@_7, TrUserData) ->
+    d_field_ApbReadObjectResp_generic(Rest, Z1, Z2, F@_1,
+				      F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
+				      TrUserData);
 dfp_read_field_def_ApbReadObjectResp(<<>>, 0, 0, F@_1,
-				     F@_2, F@_3, F@_4, F@_5, F@_6, _) ->
+				     F@_2, F@_3, F@_4, F@_5, F@_6, F@_7, _) ->
     #'ApbReadObjectResp'{counter = F@_1, set = F@_2,
-			 reg = F@_3, mvreg = F@_4, map = F@_5, flag = F@_6};
+			 reg = F@_3, mvreg = F@_4, map = F@_5, flag = F@_6,
+			 generic = F@_7};
 dfp_read_field_def_ApbReadObjectResp(Other, Z1, Z2,
-				     F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+				     F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 				     TrUserData) ->
     dg_read_field_def_ApbReadObjectResp(Other, Z1, Z2, F@_1,
-					F@_2, F@_3, F@_4, F@_5, F@_6,
+					F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 					TrUserData).
 
 dg_read_field_def_ApbReadObjectResp(<<1:1, X:7,
 				      Rest/binary>>,
 				    N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				    TrUserData)
+				    F@_7, TrUserData)
     when N < 32 - 7 ->
     dg_read_field_def_ApbReadObjectResp(Rest, N + 7,
 					X bsl N + Acc, F@_1, F@_2, F@_3, F@_4,
-					F@_5, F@_6, TrUserData);
+					F@_5, F@_6, F@_7, TrUserData);
 dg_read_field_def_ApbReadObjectResp(<<0:1, X:7,
 				      Rest/binary>>,
 				    N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				    TrUserData) ->
+				    F@_7, TrUserData) ->
     Key = X bsl N + Acc,
     case Key of
       10 ->
 	  d_field_ApbReadObjectResp_counter(Rest, 0, 0, F@_1,
-					    F@_2, F@_3, F@_4, F@_5, F@_6,
+					    F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 					    TrUserData);
       18 ->
 	  d_field_ApbReadObjectResp_set(Rest, 0, 0, F@_1, F@_2,
-					F@_3, F@_4, F@_5, F@_6, TrUserData);
+					F@_3, F@_4, F@_5, F@_6, F@_7,
+					TrUserData);
       26 ->
 	  d_field_ApbReadObjectResp_reg(Rest, 0, 0, F@_1, F@_2,
-					F@_3, F@_4, F@_5, F@_6, TrUserData);
+					F@_3, F@_4, F@_5, F@_6, F@_7,
+					TrUserData);
       34 ->
 	  d_field_ApbReadObjectResp_mvreg(Rest, 0, 0, F@_1, F@_2,
-					  F@_3, F@_4, F@_5, F@_6, TrUserData);
+					  F@_3, F@_4, F@_5, F@_6, F@_7,
+					  TrUserData);
       50 ->
 	  d_field_ApbReadObjectResp_map(Rest, 0, 0, F@_1, F@_2,
-					F@_3, F@_4, F@_5, F@_6, TrUserData);
+					F@_3, F@_4, F@_5, F@_6, F@_7,
+					TrUserData);
       58 ->
 	  d_field_ApbReadObjectResp_flag(Rest, 0, 0, F@_1, F@_2,
-					 F@_3, F@_4, F@_5, F@_6, TrUserData);
+					 F@_3, F@_4, F@_5, F@_6, F@_7,
+					 TrUserData);
+      66 ->
+	  d_field_ApbReadObjectResp_generic(Rest, 0, 0, F@_1,
+					    F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
+					    TrUserData);
       _ ->
 	  case Key band 7 of
 	    0 ->
 		skip_varint_ApbReadObjectResp(Rest, 0, 0, F@_1, F@_2,
-					      F@_3, F@_4, F@_5, F@_6,
+					      F@_3, F@_4, F@_5, F@_6, F@_7,
 					      TrUserData);
 	    1 ->
 		skip_64_ApbReadObjectResp(Rest, 0, 0, F@_1, F@_2, F@_3,
-					  F@_4, F@_5, F@_6, TrUserData);
+					  F@_4, F@_5, F@_6, F@_7, TrUserData);
 	    2 ->
 		skip_length_delimited_ApbReadObjectResp(Rest, 0, 0,
 							F@_1, F@_2, F@_3, F@_4,
-							F@_5, F@_6, TrUserData);
+							F@_5, F@_6, F@_7,
+							TrUserData);
 	    3 ->
 		skip_group_ApbReadObjectResp(Rest, Key bsr 3, 0, F@_1,
-					     F@_2, F@_3, F@_4, F@_5, F@_6,
+					     F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 					     TrUserData);
 	    5 ->
 		skip_32_ApbReadObjectResp(Rest, 0, 0, F@_1, F@_2, F@_3,
-					  F@_4, F@_5, F@_6, TrUserData)
+					  F@_4, F@_5, F@_6, F@_7, TrUserData)
 	  end
     end;
 dg_read_field_def_ApbReadObjectResp(<<>>, 0, 0, F@_1,
-				    F@_2, F@_3, F@_4, F@_5, F@_6, _) ->
+				    F@_2, F@_3, F@_4, F@_5, F@_6, F@_7, _) ->
     #'ApbReadObjectResp'{counter = F@_1, set = F@_2,
-			 reg = F@_3, mvreg = F@_4, map = F@_5, flag = F@_6}.
+			 reg = F@_3, mvreg = F@_4, map = F@_5, flag = F@_6,
+			 generic = F@_7}.
 
 d_field_ApbReadObjectResp_counter(<<1:1, X:7,
 				    Rest/binary>>,
 				  N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				  TrUserData)
+				  F@_7, TrUserData)
     when N < 57 ->
     d_field_ApbReadObjectResp_counter(Rest, N + 7,
 				      X bsl N + Acc, F@_1, F@_2, F@_3, F@_4,
-				      F@_5, F@_6, TrUserData);
+				      F@_5, F@_6, F@_7, TrUserData);
 d_field_ApbReadObjectResp_counter(<<0:1, X:7,
 				    Rest/binary>>,
 				  N, Acc, Prev, F@_2, F@_3, F@_4, F@_5, F@_6,
-				  TrUserData) ->
+				  F@_7, TrUserData) ->
     {NewFValue, RestF} = begin
 			   Len = X bsl N + Acc,
 			   <<Bs:Len/binary, Rest2/binary>> = Rest,
@@ -5707,18 +6084,18 @@ d_field_ApbReadObjectResp_counter(<<0:1, X:7,
 									    NewFValue,
 									    TrUserData)
 					 end,
-					 F@_2, F@_3, F@_4, F@_5, F@_6,
+					 F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 					 TrUserData).
 
 d_field_ApbReadObjectResp_set(<<1:1, X:7, Rest/binary>>,
-			      N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+			      N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 			      TrUserData)
     when N < 57 ->
     d_field_ApbReadObjectResp_set(Rest, N + 7,
 				  X bsl N + Acc, F@_1, F@_2, F@_3, F@_4, F@_5,
-				  F@_6, TrUserData);
+				  F@_6, F@_7, TrUserData);
 d_field_ApbReadObjectResp_set(<<0:1, X:7, Rest/binary>>,
-			      N, Acc, F@_1, Prev, F@_3, F@_4, F@_5, F@_6,
+			      N, Acc, F@_1, Prev, F@_3, F@_4, F@_5, F@_6, F@_7,
 			      TrUserData) ->
     {NewFValue, RestF} = begin
 			   Len = X bsl N + Acc,
@@ -5734,17 +6111,18 @@ d_field_ApbReadObjectResp_set(<<0:1, X:7, Rest/binary>>,
 									NewFValue,
 									TrUserData)
 					 end,
-					 F@_3, F@_4, F@_5, F@_6, TrUserData).
+					 F@_3, F@_4, F@_5, F@_6, F@_7,
+					 TrUserData).
 
 d_field_ApbReadObjectResp_reg(<<1:1, X:7, Rest/binary>>,
-			      N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+			      N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 			      TrUserData)
     when N < 57 ->
     d_field_ApbReadObjectResp_reg(Rest, N + 7,
 				  X bsl N + Acc, F@_1, F@_2, F@_3, F@_4, F@_5,
-				  F@_6, TrUserData);
+				  F@_6, F@_7, TrUserData);
 d_field_ApbReadObjectResp_reg(<<0:1, X:7, Rest/binary>>,
-			      N, Acc, F@_1, F@_2, Prev, F@_4, F@_5, F@_6,
+			      N, Acc, F@_1, F@_2, Prev, F@_4, F@_5, F@_6, F@_7,
 			      TrUserData) ->
     {NewFValue, RestF} = begin
 			   Len = X bsl N + Acc,
@@ -5761,20 +6139,20 @@ d_field_ApbReadObjectResp_reg(<<0:1, X:7, Rest/binary>>,
 									NewFValue,
 									TrUserData)
 					 end,
-					 F@_4, F@_5, F@_6, TrUserData).
+					 F@_4, F@_5, F@_6, F@_7, TrUserData).
 
 d_field_ApbReadObjectResp_mvreg(<<1:1, X:7,
 				  Rest/binary>>,
 				N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
-				TrUserData)
+				F@_7, TrUserData)
     when N < 57 ->
     d_field_ApbReadObjectResp_mvreg(Rest, N + 7,
 				    X bsl N + Acc, F@_1, F@_2, F@_3, F@_4, F@_5,
-				    F@_6, TrUserData);
+				    F@_6, F@_7, TrUserData);
 d_field_ApbReadObjectResp_mvreg(<<0:1, X:7,
 				  Rest/binary>>,
 				N, Acc, F@_1, F@_2, F@_3, Prev, F@_5, F@_6,
-				TrUserData) ->
+				F@_7, TrUserData) ->
     {NewFValue, RestF} = begin
 			   Len = X bsl N + Acc,
 			   <<Bs:Len/binary, Rest2/binary>> = Rest,
@@ -5790,17 +6168,17 @@ d_field_ApbReadObjectResp_mvreg(<<0:1, X:7,
 									  NewFValue,
 									  TrUserData)
 					 end,
-					 F@_5, F@_6, TrUserData).
+					 F@_5, F@_6, F@_7, TrUserData).
 
 d_field_ApbReadObjectResp_map(<<1:1, X:7, Rest/binary>>,
-			      N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+			      N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 			      TrUserData)
     when N < 57 ->
     d_field_ApbReadObjectResp_map(Rest, N + 7,
 				  X bsl N + Acc, F@_1, F@_2, F@_3, F@_4, F@_5,
-				  F@_6, TrUserData);
+				  F@_6, F@_7, TrUserData);
 d_field_ApbReadObjectResp_map(<<0:1, X:7, Rest/binary>>,
-			      N, Acc, F@_1, F@_2, F@_3, F@_4, Prev, F@_6,
+			      N, Acc, F@_1, F@_2, F@_3, F@_4, Prev, F@_6, F@_7,
 			      TrUserData) ->
     {NewFValue, RestF} = begin
 			   Len = X bsl N + Acc,
@@ -5817,19 +6195,19 @@ d_field_ApbReadObjectResp_map(<<0:1, X:7, Rest/binary>>,
 									NewFValue,
 									TrUserData)
 					 end,
-					 F@_6, TrUserData).
+					 F@_6, F@_7, TrUserData).
 
 d_field_ApbReadObjectResp_flag(<<1:1, X:7,
 				 Rest/binary>>,
-			       N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+			       N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 			       TrUserData)
     when N < 57 ->
     d_field_ApbReadObjectResp_flag(Rest, N + 7,
 				   X bsl N + Acc, F@_1, F@_2, F@_3, F@_4, F@_5,
-				   F@_6, TrUserData);
+				   F@_6, F@_7, TrUserData);
 d_field_ApbReadObjectResp_flag(<<0:1, X:7,
 				 Rest/binary>>,
-			       N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, Prev,
+			       N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, Prev, F@_7,
 			       TrUserData) ->
     {NewFValue, RestF} = begin
 			   Len = X bsl N + Acc,
@@ -5846,55 +6224,86 @@ d_field_ApbReadObjectResp_flag(<<0:1, X:7,
 									 NewFValue,
 									 TrUserData)
 					 end,
+					 F@_7, TrUserData).
+
+d_field_ApbReadObjectResp_generic(<<1:1, X:7,
+				    Rest/binary>>,
+				  N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+				  F@_7, TrUserData)
+    when N < 57 ->
+    d_field_ApbReadObjectResp_generic(Rest, N + 7,
+				      X bsl N + Acc, F@_1, F@_2, F@_3, F@_4,
+				      F@_5, F@_6, F@_7, TrUserData);
+d_field_ApbReadObjectResp_generic(<<0:1, X:7,
+				    Rest/binary>>,
+				  N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+				  Prev, TrUserData) ->
+    {NewFValue, RestF} = begin
+			   Len = X bsl N + Acc,
+			   <<Bs:Len/binary, Rest2/binary>> = Rest,
+			   {id(decode_msg_ApbGetGenericResp(Bs, TrUserData),
+			       TrUserData),
+			    Rest2}
+			 end,
+    dfp_read_field_def_ApbReadObjectResp(RestF, 0, 0, F@_1,
+					 F@_2, F@_3, F@_4, F@_5, F@_6,
+					 if Prev == undefined -> NewFValue;
+					    true ->
+						merge_msg_ApbGetGenericResp(Prev,
+									    NewFValue,
+									    TrUserData)
+					 end,
 					 TrUserData).
 
 skip_varint_ApbReadObjectResp(<<1:1, _:7, Rest/binary>>,
-			      Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+			      Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 			      TrUserData) ->
     skip_varint_ApbReadObjectResp(Rest, Z1, Z2, F@_1, F@_2,
-				  F@_3, F@_4, F@_5, F@_6, TrUserData);
+				  F@_3, F@_4, F@_5, F@_6, F@_7, TrUserData);
 skip_varint_ApbReadObjectResp(<<0:1, _:7, Rest/binary>>,
-			      Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6,
+			      Z1, Z2, F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 			      TrUserData) ->
     dfp_read_field_def_ApbReadObjectResp(Rest, Z1, Z2, F@_1,
-					 F@_2, F@_3, F@_4, F@_5, F@_6,
+					 F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 					 TrUserData).
 
 skip_length_delimited_ApbReadObjectResp(<<1:1, X:7,
 					  Rest/binary>>,
 					N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5,
-					F@_6, TrUserData)
+					F@_6, F@_7, TrUserData)
     when N < 57 ->
     skip_length_delimited_ApbReadObjectResp(Rest, N + 7,
 					    X bsl N + Acc, F@_1, F@_2, F@_3,
-					    F@_4, F@_5, F@_6, TrUserData);
+					    F@_4, F@_5, F@_6, F@_7, TrUserData);
 skip_length_delimited_ApbReadObjectResp(<<0:1, X:7,
 					  Rest/binary>>,
 					N, Acc, F@_1, F@_2, F@_3, F@_4, F@_5,
-					F@_6, TrUserData) ->
+					F@_6, F@_7, TrUserData) ->
     Length = X bsl N + Acc,
     <<_:Length/binary, Rest2/binary>> = Rest,
     dfp_read_field_def_ApbReadObjectResp(Rest2, 0, 0, F@_1,
-					 F@_2, F@_3, F@_4, F@_5, F@_6,
+					 F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 					 TrUserData).
 
 skip_group_ApbReadObjectResp(Bin, FNum, Z2, F@_1, F@_2,
-			     F@_3, F@_4, F@_5, F@_6, TrUserData) ->
+			     F@_3, F@_4, F@_5, F@_6, F@_7, TrUserData) ->
     {_, Rest} = read_group(Bin, FNum),
     dfp_read_field_def_ApbReadObjectResp(Rest, 0, Z2, F@_1,
-					 F@_2, F@_3, F@_4, F@_5, F@_6,
+					 F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 					 TrUserData).
 
 skip_32_ApbReadObjectResp(<<_:32, Rest/binary>>, Z1, Z2,
-			  F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData) ->
+			  F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
+			  TrUserData) ->
     dfp_read_field_def_ApbReadObjectResp(Rest, Z1, Z2, F@_1,
-					 F@_2, F@_3, F@_4, F@_5, F@_6,
+					 F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 					 TrUserData).
 
 skip_64_ApbReadObjectResp(<<_:64, Rest/binary>>, Z1, Z2,
-			  F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, TrUserData) ->
+			  F@_1, F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
+			  TrUserData) ->
     dfp_read_field_def_ApbReadObjectResp(Rest, Z1, Z2, F@_1,
-					 F@_2, F@_3, F@_4, F@_5, F@_6,
+					 F@_2, F@_3, F@_4, F@_5, F@_6, F@_7,
 					 TrUserData).
 
 decode_msg_ApbReadObjectsResp(Bin, TrUserData) ->
@@ -6912,6 +7321,7 @@ d_enum_CRDT_type(11) -> 'RRMAP';
 d_enum_CRDT_type(12) -> 'FATCOUNTER';
 d_enum_CRDT_type(13) -> 'FLAG_EW';
 d_enum_CRDT_type(14) -> 'FLAG_DW';
+d_enum_CRDT_type(15) -> 'GENERIC';
 d_enum_CRDT_type(V) -> V.
 
 'd_enum_ApbSetUpdate.SetOpType'(1) -> 'ADD';
@@ -6992,6 +7402,10 @@ merge_msgs(Prev, New, MsgName, Opts) ->
     case MsgName of
       'ApbErrorResp' ->
 	  merge_msg_ApbErrorResp(Prev, New, TrUserData);
+      'ApbGenericUpdate' ->
+	  merge_msg_ApbGenericUpdate(Prev, New, TrUserData);
+      'ApbGetGenericResp' ->
+	  merge_msg_ApbGetGenericResp(Prev, New, TrUserData);
       'ApbCounterUpdate' ->
 	  merge_msg_ApbCounterUpdate(Prev, New, TrUserData);
       'ApbGetCounterResp' ->
@@ -7075,6 +7489,22 @@ merge_msg_ApbErrorResp(#'ApbErrorResp'{},
 		       #'ApbErrorResp'{errmsg = NFerrmsg, errcode = NFerrcode},
 		       _) ->
     #'ApbErrorResp'{errmsg = NFerrmsg, errcode = NFerrcode}.
+
+-compile({nowarn_unused_function,merge_msg_ApbGenericUpdate/3}).
+merge_msg_ApbGenericUpdate(#'ApbGenericUpdate'{value =
+						   PFvalue},
+			   #'ApbGenericUpdate'{value = NFvalue}, TrUserData) ->
+    #'ApbGenericUpdate'{value =
+			    if PFvalue /= undefined, NFvalue /= undefined ->
+				   'erlang_++'(PFvalue, NFvalue, TrUserData);
+			       PFvalue == undefined -> NFvalue;
+			       NFvalue == undefined -> PFvalue
+			    end}.
+
+-compile({nowarn_unused_function,merge_msg_ApbGetGenericResp/3}).
+merge_msg_ApbGetGenericResp(#'ApbGetGenericResp'{},
+			    #'ApbGetGenericResp'{value = NFvalue}, _) ->
+    #'ApbGetGenericResp'{value = NFvalue}.
 
 -compile({nowarn_unused_function,merge_msg_ApbCounterUpdate/3}).
 merge_msg_ApbCounterUpdate(#'ApbCounterUpdate'{inc =
@@ -7291,13 +7721,15 @@ merge_msg_ApbUpdateOperation(#'ApbUpdateOperation'{counterop
 						   regop = PFregop,
 						   mapop = PFmapop,
 						   resetop = PFresetop,
-						   flagop = PFflagop},
+						   flagop = PFflagop,
+						   genop = PFgenop},
 			     #'ApbUpdateOperation'{counterop = NFcounterop,
 						   setop = NFsetop,
 						   regop = NFregop,
 						   mapop = NFmapop,
 						   resetop = NFresetop,
-						   flagop = NFflagop},
+						   flagop = NFflagop,
+						   genop = NFgenop},
 			     TrUserData) ->
     #'ApbUpdateOperation'{counterop =
 			      if PFcounterop /= undefined,
@@ -7344,6 +7776,14 @@ merge_msg_ApbUpdateOperation(#'ApbUpdateOperation'{counterop
 							     TrUserData);
 				 PFflagop == undefined -> NFflagop;
 				 NFflagop == undefined -> PFflagop
+			      end,
+			  genop =
+			      if PFgenop /= undefined, NFgenop /= undefined ->
+				     merge_msg_ApbGenericUpdate(PFgenop,
+								NFgenop,
+								TrUserData);
+				 PFgenop == undefined -> NFgenop;
+				 NFgenop == undefined -> PFgenop
 			      end}.
 
 -compile({nowarn_unused_function,merge_msg_ApbUpdateObjects/3}).
@@ -7471,11 +7911,13 @@ merge_msg_ApbReadObjectResp(#'ApbReadObjectResp'{counter
 						     = PFcounter,
 						 set = PFset, reg = PFreg,
 						 mvreg = PFmvreg, map = PFmap,
-						 flag = PFflag},
+						 flag = PFflag,
+						 generic = PFgeneric},
 			    #'ApbReadObjectResp'{counter = NFcounter,
 						 set = NFset, reg = NFreg,
 						 mvreg = NFmvreg, map = NFmap,
-						 flag = NFflag},
+						 flag = NFflag,
+						 generic = NFgeneric},
 			    TrUserData) ->
     #'ApbReadObjectResp'{counter =
 			     if PFcounter /= undefined,
@@ -7520,6 +7962,15 @@ merge_msg_ApbReadObjectResp(#'ApbReadObjectResp'{counter
 							     TrUserData);
 				PFflag == undefined -> NFflag;
 				NFflag == undefined -> PFflag
+			     end,
+			 generic =
+			     if PFgeneric /= undefined,
+				NFgeneric /= undefined ->
+				    merge_msg_ApbGetGenericResp(PFgeneric,
+								NFgeneric,
+								TrUserData);
+				PFgeneric == undefined -> NFgeneric;
+				NFgeneric == undefined -> PFgeneric
 			     end}.
 
 -compile({nowarn_unused_function,merge_msg_ApbReadObjectsResp/3}).
@@ -7657,6 +8108,10 @@ verify_msg(Msg, MsgName, Opts) ->
     case MsgName of
       'ApbErrorResp' ->
 	  v_msg_ApbErrorResp(Msg, [MsgName], TrUserData);
+      'ApbGenericUpdate' ->
+	  v_msg_ApbGenericUpdate(Msg, [MsgName], TrUserData);
+      'ApbGetGenericResp' ->
+	  v_msg_ApbGetGenericResp(Msg, [MsgName], TrUserData);
       'ApbCounterUpdate' ->
 	  v_msg_ApbCounterUpdate(Msg, [MsgName], TrUserData);
       'ApbGetCounterResp' ->
@@ -7748,6 +8203,33 @@ v_msg_ApbErrorResp(#'ApbErrorResp'{errmsg = F1,
     ok;
 v_msg_ApbErrorResp(X, Path, _TrUserData) ->
     mk_type_error({expected_msg, 'ApbErrorResp'}, X, Path).
+
+-compile({nowarn_unused_function,v_msg_ApbGenericUpdate/3}).
+-dialyzer({nowarn_function,v_msg_ApbGenericUpdate/3}).
+v_msg_ApbGenericUpdate(#'ApbGenericUpdate'{value = F1},
+		       Path, TrUserData) ->
+    if is_list(F1) ->
+	   _ = [v_type_bytes(Elem, [value | Path], TrUserData)
+		|| Elem <- F1],
+	   ok;
+       true ->
+	   mk_type_error({invalid_list_of, bytes}, F1,
+			 [value | Path])
+    end,
+    ok;
+v_msg_ApbGenericUpdate(X, Path, _TrUserData) ->
+    mk_type_error({expected_msg, 'ApbGenericUpdate'}, X,
+		  Path).
+
+-compile({nowarn_unused_function,v_msg_ApbGetGenericResp/3}).
+-dialyzer({nowarn_function,v_msg_ApbGetGenericResp/3}).
+v_msg_ApbGetGenericResp(#'ApbGetGenericResp'{value =
+						 F1},
+			Path, TrUserData) ->
+    v_type_bytes(F1, [value | Path], TrUserData), ok;
+v_msg_ApbGetGenericResp(X, Path, _TrUserData) ->
+    mk_type_error({expected_msg, 'ApbGetGenericResp'}, X,
+		  Path).
 
 -compile({nowarn_unused_function,v_msg_ApbCounterUpdate/3}).
 -dialyzer({nowarn_function,v_msg_ApbCounterUpdate/3}).
@@ -8036,7 +8518,7 @@ v_msg_ApbUpdateOperation(#'ApbUpdateOperation'{counterop
 						   = F1,
 					       setop = F2, regop = F3,
 					       mapop = F4, resetop = F5,
-					       flagop = F6},
+					       flagop = F6, genop = F7},
 			 Path, TrUserData) ->
     if F1 == undefined -> ok;
        true ->
@@ -8062,6 +8544,10 @@ v_msg_ApbUpdateOperation(#'ApbUpdateOperation'{counterop
     if F6 == undefined -> ok;
        true ->
 	   v_msg_ApbFlagUpdate(F6, [flagop | Path], TrUserData)
+    end,
+    if F7 == undefined -> ok;
+       true ->
+	   v_msg_ApbGenericUpdate(F7, [genop | Path], TrUserData)
     end,
     ok;
 v_msg_ApbUpdateOperation(X, Path, _TrUserData) ->
@@ -8205,7 +8691,7 @@ v_msg_ApbStartTransactionResp(X, Path, _TrUserData) ->
 v_msg_ApbReadObjectResp(#'ApbReadObjectResp'{counter =
 						 F1,
 					     set = F2, reg = F3, mvreg = F4,
-					     map = F5, flag = F6},
+					     map = F5, flag = F6, generic = F7},
 			Path, TrUserData) ->
     if F1 == undefined -> ok;
        true ->
@@ -8231,6 +8717,11 @@ v_msg_ApbReadObjectResp(#'ApbReadObjectResp'{counter =
     if F6 == undefined -> ok;
        true ->
 	   v_msg_ApbGetFlagResp(F6, [flag | Path], TrUserData)
+    end,
+    if F7 == undefined -> ok;
+       true ->
+	   v_msg_ApbGetGenericResp(F7, [generic | Path],
+				   TrUserData)
     end,
     ok;
 v_msg_ApbReadObjectResp(X, Path, _TrUserData) ->
@@ -8382,6 +8873,7 @@ v_enum_CRDT_type('FATCOUNTER', _Path, _TrUserData) ->
     ok;
 v_enum_CRDT_type('FLAG_EW', _Path, _TrUserData) -> ok;
 v_enum_CRDT_type('FLAG_DW', _Path, _TrUserData) -> ok;
+v_enum_CRDT_type('GENERIC', _Path, _TrUserData) -> ok;
 v_enum_CRDT_type(V, Path, TrUserData)
     when is_integer(V) ->
     v_type_sint32(V, Path, TrUserData);
@@ -8521,7 +9013,8 @@ get_msg_defs() ->
     [{{enum, 'CRDT_type'},
       [{'COUNTER', 3}, {'ORSET', 4}, {'LWWREG', 5},
        {'MVREG', 6}, {'GMAP', 8}, {'RWSET', 10}, {'RRMAP', 11},
-       {'FATCOUNTER', 12}, {'FLAG_EW', 13}, {'FLAG_DW', 14}]},
+       {'FATCOUNTER', 12}, {'FLAG_EW', 13}, {'FLAG_DW', 14},
+       {'GENERIC', 15}]},
      {{enum, 'ApbSetUpdate.SetOpType'},
       [{'ADD', 1}, {'REMOVE', 2}]},
      {{msg, 'ApbErrorResp'},
@@ -8529,6 +9022,12 @@ get_msg_defs() ->
 	      occurrence = required, opts = []},
        #field{name = errcode, fnum = 2, rnum = 3,
 	      type = uint32, occurrence = required, opts = []}]},
+     {{msg, 'ApbGenericUpdate'},
+      [#field{name = value, fnum = 1, rnum = 2, type = bytes,
+	      occurrence = repeated, opts = []}]},
+     {{msg, 'ApbGetGenericResp'},
+      [#field{name = value, fnum = 1, rnum = 2, type = bytes,
+	      occurrence = required, opts = []}]},
      {{msg, 'ApbCounterUpdate'},
       [#field{name = inc, fnum = 1, rnum = 2, type = sint64,
 	      occurrence = optional, opts = []}]},
@@ -8643,6 +9142,9 @@ get_msg_defs() ->
 	      opts = []},
        #field{name = flagop, fnum = 7, rnum = 7,
 	      type = {msg, 'ApbFlagUpdate'}, occurrence = optional,
+	      opts = []},
+       #field{name = genop, fnum = 8, rnum = 8,
+	      type = {msg, 'ApbGenericUpdate'}, occurrence = optional,
 	      opts = []}]},
      {{msg, 'ApbUpdateObjects'},
       [#field{name = updates, fnum = 1, rnum = 2,
@@ -8705,7 +9207,10 @@ get_msg_defs() ->
 	      opts = []},
        #field{name = flag, fnum = 7, rnum = 7,
 	      type = {msg, 'ApbGetFlagResp'}, occurrence = optional,
-	      opts = []}]},
+	      opts = []},
+       #field{name = generic, fnum = 8, rnum = 8,
+	      type = {msg, 'ApbGetGenericResp'},
+	      occurrence = optional, opts = []}]},
      {{msg, 'ApbReadObjectsResp'},
       [#field{name = success, fnum = 1, rnum = 2, type = bool,
 	      occurrence = required, opts = []},
@@ -8745,7 +9250,8 @@ get_msg_defs() ->
 
 
 get_msg_names() ->
-    ['ApbErrorResp', 'ApbCounterUpdate',
+    ['ApbErrorResp', 'ApbGenericUpdate',
+     'ApbGetGenericResp', 'ApbCounterUpdate',
      'ApbGetCounterResp', 'ApbSetUpdate', 'ApbGetSetResp',
      'ApbRegUpdate', 'ApbGetRegResp', 'ApbGetMVRegResp',
      'ApbMapKey', 'ApbMapUpdate', 'ApbMapNestedUpdate',
@@ -8766,7 +9272,8 @@ get_group_names() -> [].
 
 
 get_msg_or_group_names() ->
-    ['ApbErrorResp', 'ApbCounterUpdate',
+    ['ApbErrorResp', 'ApbGenericUpdate',
+     'ApbGetGenericResp', 'ApbCounterUpdate',
      'ApbGetCounterResp', 'ApbSetUpdate', 'ApbGetSetResp',
      'ApbRegUpdate', 'ApbGetRegResp', 'ApbGetMVRegResp',
      'ApbMapKey', 'ApbMapUpdate', 'ApbMapNestedUpdate',
@@ -8806,6 +9313,12 @@ find_msg_def('ApbErrorResp') ->
 	    occurrence = required, opts = []},
      #field{name = errcode, fnum = 2, rnum = 3,
 	    type = uint32, occurrence = required, opts = []}];
+find_msg_def('ApbGenericUpdate') ->
+    [#field{name = value, fnum = 1, rnum = 2, type = bytes,
+	    occurrence = repeated, opts = []}];
+find_msg_def('ApbGetGenericResp') ->
+    [#field{name = value, fnum = 1, rnum = 2, type = bytes,
+	    occurrence = required, opts = []}];
 find_msg_def('ApbCounterUpdate') ->
     [#field{name = inc, fnum = 1, rnum = 2, type = sint64,
 	    occurrence = optional, opts = []}];
@@ -8920,6 +9433,9 @@ find_msg_def('ApbUpdateOperation') ->
 	    opts = []},
      #field{name = flagop, fnum = 7, rnum = 7,
 	    type = {msg, 'ApbFlagUpdate'}, occurrence = optional,
+	    opts = []},
+     #field{name = genop, fnum = 8, rnum = 8,
+	    type = {msg, 'ApbGenericUpdate'}, occurrence = optional,
 	    opts = []}];
 find_msg_def('ApbUpdateObjects') ->
     [#field{name = updates, fnum = 1, rnum = 2,
@@ -8982,7 +9498,10 @@ find_msg_def('ApbReadObjectResp') ->
 	    opts = []},
      #field{name = flag, fnum = 7, rnum = 7,
 	    type = {msg, 'ApbGetFlagResp'}, occurrence = optional,
-	    opts = []}];
+	    opts = []},
+     #field{name = generic, fnum = 8, rnum = 8,
+	    type = {msg, 'ApbGetGenericResp'},
+	    occurrence = optional, opts = []}];
 find_msg_def('ApbReadObjectsResp') ->
     [#field{name = success, fnum = 1, rnum = 2, type = bool,
 	    occurrence = required, opts = []},
@@ -9025,7 +9544,8 @@ find_msg_def(_) -> error.
 find_enum_def('CRDT_type') ->
     [{'COUNTER', 3}, {'ORSET', 4}, {'LWWREG', 5},
      {'MVREG', 6}, {'GMAP', 8}, {'RWSET', 10}, {'RRMAP', 11},
-     {'FATCOUNTER', 12}, {'FLAG_EW', 13}, {'FLAG_DW', 14}];
+     {'FATCOUNTER', 12}, {'FLAG_EW', 13}, {'FLAG_DW', 14},
+     {'GENERIC', 15}];
 find_enum_def('ApbSetUpdate.SetOpType') ->
     [{'ADD', 1}, {'REMOVE', 2}];
 find_enum_def(_) -> error.
@@ -9052,7 +9572,8 @@ enum_symbol_by_value_CRDT_type(10) -> 'RWSET';
 enum_symbol_by_value_CRDT_type(11) -> 'RRMAP';
 enum_symbol_by_value_CRDT_type(12) -> 'FATCOUNTER';
 enum_symbol_by_value_CRDT_type(13) -> 'FLAG_EW';
-enum_symbol_by_value_CRDT_type(14) -> 'FLAG_DW'.
+enum_symbol_by_value_CRDT_type(14) -> 'FLAG_DW';
+enum_symbol_by_value_CRDT_type(15) -> 'GENERIC'.
 
 
 enum_value_by_symbol_CRDT_type('COUNTER') -> 3;
@@ -9064,7 +9585,8 @@ enum_value_by_symbol_CRDT_type('RWSET') -> 10;
 enum_value_by_symbol_CRDT_type('RRMAP') -> 11;
 enum_value_by_symbol_CRDT_type('FATCOUNTER') -> 12;
 enum_value_by_symbol_CRDT_type('FLAG_EW') -> 13;
-enum_value_by_symbol_CRDT_type('FLAG_DW') -> 14.
+enum_value_by_symbol_CRDT_type('FLAG_DW') -> 14;
+enum_value_by_symbol_CRDT_type('GENERIC') -> 15.
 
 'enum_symbol_by_value_ApbSetUpdate.SetOpType'(1) ->
     'ADD';

@@ -74,7 +74,8 @@
 | {reg, binary()}
 | {mvreg, [binary()]}
 | {map, [{{Key :: binary(), Type :: atom()}, Value :: read_result()}]}
-| {flag, boolean()}.
+| {flag, boolean()}
+| {generic, boolean()}.
 
 -type request() ::
   {start_transaction, {Clock :: binary(), Properties :: list()}}
@@ -538,6 +539,7 @@ encode_read_objects(Objects, TxId) ->
 %%GMAP = 8;
 %%AWMAP = 9;
 %%RWSET = 10;
+%%Generic = 11;
 
 encode_type(antidote_crdt_counter_pn)   -> 'COUNTER';
 encode_type(antidote_crdt_counter_fat)  -> 'FATCOUNTER';
@@ -549,6 +551,7 @@ encode_type(antidote_crdt_set_rw)       -> 'RWSET';
 encode_type(antidote_crdt_map_rr)       -> 'RRMAP';
 encode_type(antidote_crdt_flag_ew)      -> 'FLAG_EW';
 encode_type(antidote_crdt_flag_dw)      -> 'FLAG_DW';
+encode_type(antidote_crdt_generic)      -> 'GENERIC';
 encode_type(T)                          -> erlang:error({unknown_crdt_type, T}).
 
 
@@ -562,6 +565,7 @@ decode_type('RWSET')      -> antidote_crdt_set_rw;
 decode_type('RRMAP')      -> antidote_crdt_map_rr;
 decode_type('FLAG_EW')    -> antidote_crdt_flag_ew;
 decode_type('FLAG_DW')    -> antidote_crdt_flag_dw;
+decode_type('GENERIC')    -> antidote_crdt_generic;
 decode_type(T)            -> erlang:error({unknown_crdt_type_protobuf, T}).
 
 
@@ -591,6 +595,8 @@ encode_update_operation(antidote_crdt_flag_ew, Op_Param) ->
   #'ApbUpdateOperation'{flagop = encode_flag_update(Op_Param)};
 encode_update_operation(antidote_crdt_flag_dw, Op_Param) ->
   #'ApbUpdateOperation'{flagop = encode_flag_update(Op_Param)};
+encode_update_operation(antidote_crdt_generic, Op_Param) ->
+  #'ApbUpdateOperation'{genop = encode_generic_update(Op_Param)};
 encode_update_operation(Type, _Op) ->
   throw({invalid_type, Type}).
 
@@ -604,6 +610,8 @@ decode_update_operation(#'ApbUpdateOperation'{mapop = Op}) when Op /= undefined 
   decode_map_update(Op);
 decode_update_operation(#'ApbUpdateOperation'{flagop = Op}) when Op /= undefined ->
   decode_flag_update(Op);
+decode_update_operation(#'ApbUpdateOperation'{genop = Op}) when Op /= undefined ->
+  decode_generic_update(Op);
 decode_update_operation(#'ApbUpdateOperation'{resetop = #'ApbCrdtReset'{}}) ->
   {reset, {}}.
 
@@ -636,7 +644,9 @@ encode_read_object_resp(antidote_crdt_map_rr, Val) ->
 encode_read_object_resp(antidote_crdt_flag_ew, Val) ->
   #'ApbReadObjectResp'{flag = #'ApbGetFlagResp'{value = Val}};
 encode_read_object_resp(antidote_crdt_flag_dw, Val) ->
-  #'ApbReadObjectResp'{flag = #'ApbGetFlagResp'{value = Val}}.
+  #'ApbReadObjectResp'{flag = #'ApbGetFlagResp'{value = Val}};
+encode_read_object_resp(antidote_crdt_generic, Val) ->
+  #'ApbReadObjectResp'{generic = #'ApbGetGenericResp'{value = Val}}.
 
 % TODO why does this use counter instead of antidote_crdt_counter etc.?
 decode_read_object_resp(#'ApbReadObjectResp'{counter = #'ApbGetCounterResp'{value = Val}}) ->
@@ -650,7 +660,9 @@ decode_read_object_resp(#'ApbReadObjectResp'{mvreg = #'ApbGetMVRegResp'{values =
 decode_read_object_resp(#'ApbReadObjectResp'{map = MapResp = #'ApbGetMapResp'{}}) ->
   {map, decode_map_get_resp(MapResp)};
 decode_read_object_resp(#'ApbReadObjectResp'{flag = #'ApbGetFlagResp'{value = Val}}) ->
-  {flag, Val}.
+  {flag, Val};
+decode_read_object_resp(#'ApbReadObjectResp'{generic = #'ApbGetGenericResp'{value = Val}}) ->
+  {generic, Val}.
 
 % set updates
 
@@ -791,6 +803,20 @@ decode_map_entry(#'ApbMapEntry'{key = KeyEnc, value = ValueEnc}) ->
   {_Tag, Value} = decode_read_object_resp(ValueEnc),
   {{Key, Type}, Value}.
 
+% generic updates
+
+encode_generic_update({invoke, Value}) ->
+  #'ApbGenericUpdate'{value = Value};
+encode_generic_update({invoke_all, Value}) ->
+  #'ApbGenericUpdate'{value = [Value]}.
+
+decode_generic_update(Update) ->
+  #'ApbGenericUpdate'{value = Value} = Update,
+  case Value of
+    undefined -> [];
+    [Elem] -> {invoke, Elem};
+    Elems when is_list(Elems) -> {invoke_all, Elems}
+  end.
 
 %% Cluster Management
 

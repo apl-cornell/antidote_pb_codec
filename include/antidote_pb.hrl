@@ -15,6 +15,20 @@
         }).
 -endif.
 
+-ifndef('APBGENERICUPDATE_PB_H').
+-define('APBGENERICUPDATE_PB_H', true).
+-record('ApbGenericUpdate',
+        {value = []             :: [iodata()] | undefined % = 1
+        }).
+-endif.
+
+-ifndef('APBGETGENERICRESP_PB_H').
+-define('APBGETGENERICRESP_PB_H', true).
+-record('ApbGetGenericResp',
+        {value                  :: iodata()         % = 1
+        }).
+-endif.
+
 -ifndef('APBCOUNTERUPDATE_PB_H').
 -define('APBCOUNTERUPDATE_PB_H', true).
 -record('ApbCounterUpdate',
@@ -70,7 +84,7 @@
 -define('APBMAPKEY_PB_H', true).
 -record('ApbMapKey',
         {key                    :: iodata(),        % = 1
-         type                   :: 'COUNTER' | 'ORSET' | 'LWWREG' | 'MVREG' | 'GMAP' | 'RWSET' | 'RRMAP' | 'FATCOUNTER' | 'FLAG_EW' | 'FLAG_DW' | integer() % = 2, enum CRDT_type
+         type                   :: 'COUNTER' | 'ORSET' | 'LWWREG' | 'MVREG' | 'GMAP' | 'RWSET' | 'RRMAP' | 'FATCOUNTER' | 'FLAG_EW' | 'FLAG_DW' | 'GENERIC' | integer() % = 2, enum CRDT_type
         }).
 -endif.
 
@@ -146,7 +160,7 @@
 -define('APBBOUNDOBJECT_PB_H', true).
 -record('ApbBoundObject',
         {key                    :: iodata(),        % = 1
-         type                   :: 'COUNTER' | 'ORSET' | 'LWWREG' | 'MVREG' | 'GMAP' | 'RWSET' | 'RRMAP' | 'FATCOUNTER' | 'FLAG_EW' | 'FLAG_DW' | integer(), % = 2, enum CRDT_type
+         type                   :: 'COUNTER' | 'ORSET' | 'LWWREG' | 'MVREG' | 'GMAP' | 'RWSET' | 'RRMAP' | 'FATCOUNTER' | 'FLAG_EW' | 'FLAG_DW' | 'GENERIC' | integer(), % = 2, enum CRDT_type
          bucket                 :: iodata()         % = 3
         }).
 -endif.
@@ -175,7 +189,8 @@
          regop                  :: antidote_pb:'ApbRegUpdate'() | undefined, % = 3
          mapop                  :: antidote_pb:'ApbMapUpdate'() | undefined, % = 5
          resetop                :: antidote_pb:'ApbCrdtReset'() | undefined, % = 6
-         flagop                 :: antidote_pb:'ApbFlagUpdate'() | undefined % = 7
+         flagop                 :: antidote_pb:'ApbFlagUpdate'() | undefined, % = 7
+         genop                  :: antidote_pb:'ApbGenericUpdate'() | undefined % = 8
         }).
 -endif.
 
@@ -242,7 +257,8 @@
          reg                    :: antidote_pb:'ApbGetRegResp'() | undefined, % = 3
          mvreg                  :: antidote_pb:'ApbGetMVRegResp'() | undefined, % = 4
          map                    :: antidote_pb:'ApbGetMapResp'() | undefined, % = 6
-         flag                   :: antidote_pb:'ApbGetFlagResp'() | undefined % = 7
+         flag                   :: antidote_pb:'ApbGetFlagResp'() | undefined, % = 7
+         generic                :: antidote_pb:'ApbGetGenericResp'() | undefined % = 8
         }).
 -endif.
 
