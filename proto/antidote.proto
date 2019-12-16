@@ -26,18 +26,17 @@ message ApbErrorResp {
     required uint32 errcode = 2;
 }
 
-
 //------------------
-// GENERIC
+// Generic
 
 // Generic update
 message ApbGenericUpdate {
-    repeated bytes value = 1;
+  repeated bytes value = 1;
 }
 
 // Generic response
 message ApbGetGenericResp {
-    required bytes value = 1;
+  required bytes value = 1;
 }
 
 
@@ -238,6 +237,7 @@ message ApbReadObjectResp {
     optional ApbGetFlagResp flag = 7;
     optional ApbGetGenericResp generic = 8;
 }
+
 message ApbReadObjectsResp {
     required bool success = 1;
     repeated ApbReadObjectResp objects = 2;
