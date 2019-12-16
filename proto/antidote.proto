@@ -26,21 +26,6 @@ message ApbErrorResp {
     required uint32 errcode = 2;
 }
 
-
-//------------------
-// GENERIC
-
-// Generic update
-message ApbGenericUpdate {
-    repeated bytes value = 1;
-}
-
-// Generic response
-message ApbGetGenericResp {
-    required bytes value = 1;
-}
-
-
 //------------------
 // Generic
 
