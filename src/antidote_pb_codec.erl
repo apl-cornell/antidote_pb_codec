@@ -594,7 +594,9 @@ encode_crdt_type(antidote_crdt_map_rr) ->
 encode_crdt_type(antidote_crdt_flag_ew) ->
     flag;
 encode_crdt_type(antidote_crdt_flag_dw) ->
-    flag.
+    flag;
+encode_crdt_type(antidote_crdt_generic) ->
+    generic.
 
 encode_read_object_resp(reg, Val) ->
   #'ApbReadObjectResp'{reg = #'ApbGetRegResp'{value = Val}};
@@ -607,14 +609,8 @@ encode_read_object_resp(set, Val) ->
 encode_read_object_resp(map, Val) ->
   #'ApbReadObjectResp'{map = encode_map_get_resp(Val)};
 encode_read_object_resp(flag, Val) ->
-  #'ApbReadObjectResp'{flag = #'ApbGetFlagResp'{value = Val}}.
-encode_read_object_resp(antidote_crdt_map_rr, Val) ->
-  #'ApbReadObjectResp'{map = encode_map_get_resp(Val)};
-encode_read_object_resp(antidote_crdt_flag_ew, Val) ->
   #'ApbReadObjectResp'{flag = #'ApbGetFlagResp'{value = Val}};
-encode_read_object_resp(antidote_crdt_flag_dw, Val) ->
-  #'ApbReadObjectResp'{flag = #'ApbGetFlagResp'{value = Val}};
-encode_read_object_resp(antidote_crdt_generic, Val) ->
+encode_read_object_resp(generic, Val) ->
   #'ApbReadObjectResp'{generic = #'ApbGetGenericResp'{value = Val}}.
 
 decode_read_object_resp(#'ApbReadObjectResp'{counter = #'ApbGetCounterResp'{value = Val}}) ->
